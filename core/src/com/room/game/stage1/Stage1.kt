@@ -7,26 +7,42 @@ class Stage1 : Stage {
     override val ui: MutableList<ScreenItem> = mutableListOf(
             ScreenItem(
                     drawable = Drawable("arrow_left.png"),
-                    onClick = { currentScreen = if (currentScreen < 1) walls.size - 1 else --currentScreen },
+                    onClick = { currentScreenInt = if (currentScreenInt < 1) screens.size - 1 else --currentScreenInt },
                     x = 20f,
                     y = 40f
             ),
             ScreenItem(
                     drawable = Drawable("arrow_right.png"),
-                    onClick = { currentScreen = if (currentScreen > walls.size - 2) 0 else ++currentScreen },
+                    onClick = { currentScreenInt = if (currentScreenInt > screens.size - 2) 0 else ++currentScreenInt },
                     x = 196f,
                     y = 40f
             ))
-    override var currentScreen: Int = 0
     override val floor: Screen? = null
     override val ceiling: Screen? = null
-    override val walls: LinkedList<Screen> = LinkedList(listOf(Screen1(), Screen2(), Screen3(), Screen4()))
+    override val screens: LinkedList<Screen> = LinkedList(listOf(Screen1(), Screen2(), Screen3(), Screen4()))
     override val backpack: MutableList<BackpackItem> = mutableListOf()
+
+    private var currentScreenInt: Int = 0
+
+    override fun getCurrentScreen() = screens[currentScreenInt]
 }
 
 class Screen1 : Screen {
     override val background: Drawable = Drawable("background1.jpg")
-    override val screenObjects: List<ScreenItem> = listOf()
+    override val screenObjects: List<ScreenItem> = listOf(
+            ScreenItem(
+                    drawable = Drawable("background2.jpg"),
+                    onClick = { },
+                    x = 5f,
+                    y = 5f
+            ),
+            ScreenItem(
+                    drawable = Drawable("background3.jpg"),
+                    onClick = { },
+                    x = 10f,
+                    y = 10f
+            )
+    )
 }
 
 class Screen2 : Screen {

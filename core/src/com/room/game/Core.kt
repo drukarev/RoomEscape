@@ -5,10 +5,10 @@ import java.util.*
 interface Stage {
     val floor: Screen?
     val ceiling: Screen?
-    val walls: LinkedList<Screen>
+    val screens: LinkedList<Screen>
     val backpack: List<BackpackItem>
     val ui: List<ScreenItem>
-    val currentScreen: Int
+    fun getCurrentScreen(): Screen
 }
 
 interface Screen {
