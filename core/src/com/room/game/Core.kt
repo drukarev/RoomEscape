@@ -6,8 +6,8 @@ interface Stage {
     val floor: Screen?
     val ceiling: Screen?
     val walls: LinkedList<Screen>
-    val backpack: MutableList<BackpackItem>
-
+    val backpack: List<BackpackItem>
+    val ui: List<ScreenItem>
     val currentScreen: Int
 }
 
@@ -16,13 +16,15 @@ interface Screen {
     val screenObjects: List<ScreenItem>
 }
 
-interface ScreenItem {
-    val drawable: Drawable
-    fun onClick()
-}
+data class ScreenItem(
+        val drawable: Drawable,
+        val onClick: () -> Unit,
+        val x: Float,
+        val y: Float
+)
 
 interface BackpackItem {
     val drawable: Drawable
 }
 
-class Drawable(val resourceId: String)
+data class Drawable(val resourceId: String)

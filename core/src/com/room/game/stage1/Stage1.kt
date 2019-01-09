@@ -4,6 +4,19 @@ import com.room.game.*
 import java.util.*
 
 class Stage1 : Stage {
+    override val ui: MutableList<ScreenItem> = mutableListOf(
+            ScreenItem(
+                    drawable = Drawable("arrow_left.png"),
+                    onClick = { currentScreen = if (currentScreen < 1) walls.size - 1 else --currentScreen },
+                    x = 20f,
+                    y = 40f
+            ),
+            ScreenItem(
+                    drawable = Drawable("arrow_right.png"),
+                    onClick = { currentScreen = if (currentScreen > walls.size - 2) 0 else ++currentScreen },
+                    x = 196f,
+                    y = 40f
+            ))
     override var currentScreen: Int = 0
     override val floor: Screen? = null
     override val ceiling: Screen? = null
