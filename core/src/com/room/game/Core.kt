@@ -6,7 +6,7 @@ interface Stage {
     val floor: Screen?
     val ceiling: Screen?
     val screens: LinkedList<Screen>
-    val backpack: List<BackpackItem>
+    val backpack: List<InventoryItem>
     val ui: List<ScreenItem>
     val currentScreen: Screen
 }
@@ -26,8 +26,10 @@ data class ScreenItem(
         val y: Float
 )
 
-interface BackpackItem {
-    val drawable: Drawable
+sealed class InventoryItem(val drawable: Drawable) {
+    object Key1 : InventoryItem(Drawable("arrow_down.png"))
+    object Key2 : InventoryItem(Drawable("arrow_left.png"))
+    object Key3 : InventoryItem(Drawable("arrow_right.png"))
 }
 
 data class Drawable(val resourceId: String)

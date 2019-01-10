@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.input.GestureDetector
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.InputEvent
@@ -23,6 +24,7 @@ class RoomEscape : ApplicationAdapter() {
     private lateinit var batch: SpriteBatch
     private lateinit var currentStage: Stage
     private lateinit var libgdxStage: LibgdxStage
+    private lateinit var shapeRenderer: ShapeRenderer
 
     private lateinit var clickAnimation: Animation<TextureRegion>
     private var clickAnimationStateTime = 100f
@@ -32,6 +34,7 @@ class RoomEscape : ApplicationAdapter() {
         batch = SpriteBatch()
         currentStage = Stage1()
         libgdxStage = LibgdxStage(ScreenViewport())
+        shapeRenderer = ShapeRenderer()
 
         val inputMultiplexer = InputMultiplexer()
         inputMultiplexer.addProcessor(GestureDetector(GestureListener()))
@@ -50,6 +53,7 @@ class RoomEscape : ApplicationAdapter() {
     }
 
     override fun render() {
+        Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
         clickAnimationStateTime += Gdx.graphics.deltaTime
@@ -76,6 +80,20 @@ class RoomEscape : ApplicationAdapter() {
         }
         currentStage.ui.forEach { addUiElement(it) }
 
+        shapeRenderer.apply {
+            begin(ShapeRenderer.ShapeType.Filled)
+            setColor(255f, 255f, 255f, 20f)
+            rect(Gdx.graphics.width - 60f, 0f, 60f, Gdx.graphics.height.toFloat())
+            end()
+        }
+
+        var margin = 0f
+        currentStage.backpack.map {
+            margin += 60f
+            ScreenItem(it.drawable, {}, Gdx.graphics.width - 50f, Gdx.graphics.height - margin)
+        }.forEach {
+            addUiElement(it)
+        }
 
         libgdxStage.act()
         libgdxStage.draw()

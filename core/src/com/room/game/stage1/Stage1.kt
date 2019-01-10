@@ -1,6 +1,8 @@
 package com.room.game.stage1
 
 import com.room.game.*
+import com.room.game.InventoryItem.Key1
+import com.room.game.InventoryItem.Key2
 import java.util.*
 
 class Stage1 : Stage {
@@ -26,7 +28,7 @@ class Stage1 : Stage {
     override val floor: Screen? = null
     override val ceiling: Screen? = null
     override val screens: LinkedList<Screen> = LinkedList(listOf(Screen1, Screen2, Screen3, Screen4))
-    override val backpack: MutableList<BackpackItem> = mutableListOf()
+    override val backpack: MutableList<InventoryItem> = mutableListOf(Key1, Key2)
 
     override var currentScreen: Screen = screens.first
 
