@@ -33,7 +33,7 @@ class RoomEscape : ApplicationAdapter() {
         batch.begin()
 
         //TODO: move Texture creation out of render()
-        val background = Texture(currentStage.getCurrentScreen().background.resourceId)
+        val background = Texture(currentStage.currentScreen.background.resourceId)
 
         batch.draw(background, 0f, 0f)
         batch.end()
@@ -41,7 +41,7 @@ class RoomEscape : ApplicationAdapter() {
         libgdxStage.actors.removeAll { true }
 
         //TODO: don't add objects that are already here
-        currentStage.getCurrentScreen().screenObjects.forEach {
+        currentStage.currentScreen.screenObjects.forEach {
             addUiElement(it)
         }
         currentStage.ui.forEach { addUiElement(it) }

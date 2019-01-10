@@ -8,12 +8,15 @@ interface Stage {
     val screens: LinkedList<Screen>
     val backpack: List<BackpackItem>
     val ui: List<ScreenItem>
-    fun getCurrentScreen(): Screen
+    val currentScreen: Screen
 }
 
 interface Screen {
     val background: Drawable
     val screenObjects: List<ScreenItem>
+    val leftScreen: Screen?
+    val rightScreen: Screen?
+    val downScreen: Screen?
 }
 
 data class ScreenItem(
