@@ -23,12 +23,14 @@ data class ScreenItem(
         val drawable: Drawable,
         val onClick: () -> Unit,
         val x: Float,
-        val y: Float
+        val y: Float,
+        val width: Float,
+        val height: Float
 )
 
 sealed class InventoryItem(val drawable: Drawable) {
     object Key1 : InventoryItem(Drawable("arrow_down.png"))
-    object Key2 : InventoryItem(Drawable("arrow_left.png"))
+    object Phone : InventoryItem(Drawable("icon_phone.jpg"))
     object Key3 : InventoryItem(Drawable("arrow_right.png"))
 }
 

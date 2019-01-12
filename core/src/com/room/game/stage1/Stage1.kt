@@ -2,7 +2,7 @@ package com.room.game.stage1
 
 import com.room.game.*
 import com.room.game.InventoryItem.Key1
-import com.room.game.InventoryItem.Key2
+import com.room.game.InventoryItem.Phone
 import java.util.*
 
 class Stage1 : Stage {
@@ -10,25 +10,31 @@ class Stage1 : Stage {
             ScreenItem(
                     drawable = Drawable("arrow_left.png"),
                     onClick = { setCurrentScreen(ArrowDirection.LEFT) },
-                    x = 20f,
-                    y = 40f
+                    x = 50f,
+                    y = 530f,
+                    width = 80f,
+                    height = 80f
             ),
             ScreenItem(
                     drawable = Drawable("arrow_right.png"),
                     onClick = { setCurrentScreen(ArrowDirection.RIGHT) },
-                    x = 196f,
-                    y = 40f
+                    x = 1830f,
+                    y = 530f,
+                    width = 80f,
+                    height = 80f
             ),
             ScreenItem(  //TODO: make down button invisible when down action is not allowed
                     drawable = Drawable("arrow_down.png"),
                     onClick = { setCurrentScreen(ArrowDirection.DOWN) },
-                    x = 108f,
-                    y = 40f
+                    x = 920f,
+                    y = 30f,
+                    width = 80f,
+                    height = 80f
             ))
     override val floor: Screen? = null
     override val ceiling: Screen? = null
     override val screens: LinkedList<Screen> = LinkedList(listOf(Screen1, Screen2, Screen3, Screen4))
-    override val backpack: MutableList<InventoryItem> = mutableListOf(Key1, Key2)
+    override val backpack: MutableList<InventoryItem> = mutableListOf(Key1, Phone)
 
     override var currentScreen: Screen = screens.first
 
@@ -52,20 +58,7 @@ object Screen1 : Screen {
     override val rightScreen: Screen = Screen2
     override val downScreen: Screen? = Screen11
     override val background: Drawable = Drawable("background1.jpg")
-    override val screenObjects: List<ScreenItem> = listOf(
-            ScreenItem(
-                    drawable = Drawable("background2.jpg"),
-                    onClick = { },
-                    x = 5f,
-                    y = 5f
-            ),
-            ScreenItem(
-                    drawable = Drawable("background3.jpg"),
-                    onClick = { },
-                    x = 10f,
-                    y = 10f
-            )
-    )
+    override val screenObjects: List<ScreenItem> = listOf()
 }
 
 object Screen11 : Screen {
@@ -81,7 +74,16 @@ object Screen2 : Screen {
     override val rightScreen: Screen = Screen3
     override val downScreen: Screen? = null
     override val background: Drawable = Drawable("background2.jpg")
-    override val screenObjects: List<ScreenItem> = listOf()
+    override val screenObjects: List<ScreenItem> = listOf(
+            ScreenItem(
+                    drawable = Drawable("icon_phone.jpg"),
+                    onClick = { },
+                    x = 1000f,
+                    y = 200f,
+                    width = 160f,
+                    height = 160f
+            )
+    )
 }
 
 object Screen3 : Screen {

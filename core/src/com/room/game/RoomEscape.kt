@@ -3,9 +3,9 @@ package com.room.game
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
-import com.badlogic.gdx.graphics.GL20
-import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.*
 import com.badlogic.gdx.graphics.g2d.Animation
+import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
@@ -15,9 +15,10 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
-import com.badlogic.gdx.utils.viewport.ScreenViewport
+import com.badlogic.gdx.utils.viewport.FitViewport
 import com.room.game.stage1.Stage1
 import com.badlogic.gdx.scenes.scene2d.Stage as LibgdxStage
+import com.badlogic.gdx.math.Vector3
 
 class RoomEscape : ApplicationAdapter() {
 
@@ -25,16 +26,20 @@ class RoomEscape : ApplicationAdapter() {
     private lateinit var currentStage: Stage
     private lateinit var libgdxStage: LibgdxStage
     private lateinit var shapeRenderer: ShapeRenderer
+    private lateinit var camera: Camera
+    private lateinit var viewport: FitViewport
 
     private lateinit var clickAnimation: Animation<TextureRegion>
     private var clickAnimationStateTime = 100f
-    private var clickAnimationCoordinates = Pair(0f, 0f)
+    private var clickAnimationCoordinates: Vector3 = Vector3()
 
     override fun create() {
         batch = SpriteBatch()
         currentStage = Stage1()
-        libgdxStage = LibgdxStage(ScreenViewport())
         shapeRenderer = ShapeRenderer()
+        camera = OrthographicCamera()
+        viewport = FitViewport(1920f, 1080f, camera)
+        libgdxStage = LibgdxStage(viewport)
 
         val inputMultiplexer = InputMultiplexer()
         inputMultiplexer.addProcessor(GestureDetector(GestureListener()))
@@ -59,14 +64,15 @@ class RoomEscape : ApplicationAdapter() {
         clickAnimationStateTime += Gdx.graphics.deltaTime
 
         batch.apply {
+            projectionMatrix = camera.combined
             begin()
             //TODO: move Texture creation out of render()
             val background = Texture(currentStage.currentScreen.background.resourceId)
-            draw(background, 0f, 0f)
+            Sprite(background).draw(this)
 
             if (clickAnimationStateTime < 0.4f) {
                 val currentFrame = clickAnimation.getKeyFrame(clickAnimationStateTime, false)
-                draw(currentFrame, clickAnimationCoordinates.first, Gdx.graphics.height - clickAnimationCoordinates.second, 40f, 40f)
+                draw(currentFrame, clickAnimationCoordinates.x, clickAnimationCoordinates.y, 40f, 40f)
             }
 
             end()
@@ -80,23 +86,33 @@ class RoomEscape : ApplicationAdapter() {
         }
         currentStage.ui.forEach { addUiElement(it) }
 
+        drawInventory()
+
+        libgdxStage.act()
+        libgdxStage.draw()
+    }
+
+    private fun drawInventory() {
         shapeRenderer.apply {
             begin(ShapeRenderer.ShapeType.Filled)
-            setColor(255f, 255f, 255f, 20f)
-            rect(Gdx.graphics.width - 60f, 0f, 60f, Gdx.graphics.height.toFloat())
+            setColor(240f, 240f, 240f, 20f)
+            rect(viewport.worldWidth - 60f, 0f, 60f, viewport.worldHeight)
             end()
         }
 
         var margin = 0f
         currentStage.backpack.map {
-            margin += 60f
-            ScreenItem(it.drawable, {}, Gdx.graphics.width - 50f, Gdx.graphics.height - margin)
+            margin += 200f
+            ScreenItem(it.drawable, {}, viewport.worldWidth - 200f, viewport.worldHeight - margin, 160f, 160f)
         }.forEach {
             addUiElement(it)
         }
+    }
 
-        libgdxStage.act()
-        libgdxStage.draw()
+    override fun resize(width: Int, height: Int) {
+        super.resize(width, height)
+        libgdxStage.viewport.update(width, height, true)
+        viewport.update(width, height)
     }
 
     override fun dispose() {
@@ -115,7 +131,7 @@ class RoomEscape : ApplicationAdapter() {
             }
         })
         button.setPosition(screenItem.x, screenItem.y)
-        button.setSize(40f, 40f)
+        button.setSize(screenItem.width, screenItem.height)
         libgdxStage.addActor(button)
         return button
     }
@@ -139,7 +155,9 @@ class RoomEscape : ApplicationAdapter() {
 
         override fun touchDown(x: Float, y: Float, pointer: Int, button: Int): Boolean {
             clickAnimationStateTime = 0f
-            clickAnimationCoordinates = Pair(x - 20f, y + 20f)
+            val coordinates = Vector3(x, y, 0f)
+            camera.unproject(coordinates)
+            clickAnimationCoordinates = coordinates
             return false
         }
     }
