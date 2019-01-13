@@ -3,6 +3,8 @@ package com.room.game
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
+import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.graphics.*
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.Sprite
@@ -55,6 +57,20 @@ class RoomEscape : ApplicationAdapter() {
             }))
         }
         clickAnimation = Animation(0.1f, *frames)
+
+        setMusic()
+    }
+
+    private fun setMusic() {
+        AssetManager().apply {
+            val musicName = "hard_boiled.mp3"
+            load(musicName, Music::class.java)
+            finishLoading()
+            update()
+            val music: Music = get(musicName)
+            music.play()
+            music.isLooping = true
+        }
     }
 
     override fun render() {
