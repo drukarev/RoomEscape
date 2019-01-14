@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport
 import com.room.game.stage1.Stage1
 import com.badlogic.gdx.scenes.scene2d.Stage as LibgdxStage
 import com.badlogic.gdx.math.Vector3
+import com.room.game.stage1.EventHandler
 
 class RoomEscape : ApplicationAdapter() {
 
@@ -30,6 +31,8 @@ class RoomEscape : ApplicationAdapter() {
     private lateinit var shapeRenderer: ShapeRenderer
     private lateinit var camera: Camera
     private lateinit var viewport: FitViewport
+
+    private lateinit var eventHandler: EventHandler
 
     private lateinit var clickAnimation: Animation<TextureRegion>
     private var clickAnimationStateTime = 100f
@@ -42,6 +45,8 @@ class RoomEscape : ApplicationAdapter() {
         camera = OrthographicCamera()
         viewport = FitViewport(1920f, 1080f, camera)
         libgdxStage = LibgdxStage(viewport)
+
+        eventHandler = EventHandler(listOf(currentStage as EventHandler.Listener))
 
         val inputMultiplexer = InputMultiplexer()
         inputMultiplexer.addProcessor(GestureDetector(GestureListener()))
@@ -74,7 +79,7 @@ class RoomEscape : ApplicationAdapter() {
     }
 
     override fun render() {
-        Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
+        Gdx.gl.glClearColor(0f, 0f, 0f, 0f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
         clickAnimationStateTime += Gdx.graphics.deltaTime
@@ -119,7 +124,7 @@ class RoomEscape : ApplicationAdapter() {
         var margin = 0f
         currentStage.backpack.map {
             margin += 200f
-            ScreenItem(it.drawable, {}, viewport.worldWidth - 200f, viewport.worldHeight - margin, 160f, 160f)
+            ScreenItem(it.drawable, viewport.worldWidth - 200f, viewport.worldHeight - margin, 160f, 160f, it.event)
         }.forEach {
             addUiElement(it)
         }
@@ -142,7 +147,9 @@ class RoomEscape : ApplicationAdapter() {
         val button = ImageButton(textureRegionDrawable)
         button.addListener(object : ClickListener() {
             override fun touchDown(event: InputEvent?, x: Float, y: Float, pointer: Int, button: Int): Boolean {
-                screenItem.onClick()
+                screenItem.event?.also {
+                    eventHandler.handleEvent(it)
+                }
                 return false
             }
         })

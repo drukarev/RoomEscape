@@ -1,5 +1,6 @@
 package com.room.game
 
+import com.room.game.stage1.Event
 import java.util.*
 
 interface Stage {
@@ -19,19 +20,20 @@ interface Screen {
     val downScreen: Screen?
 }
 
-data class ScreenItem(
+open class ScreenItem(
         val drawable: Drawable,
-        val onClick: () -> Unit,
         val x: Float,
         val y: Float,
         val width: Float,
-        val height: Float
+        val height: Float,
+        val event: Event?
 )
 
-sealed class InventoryItem(val drawable: Drawable) {
-    object Key1 : InventoryItem(Drawable("arrow_down.png"))
-    object Phone : InventoryItem(Drawable("icon_phone.jpg"))
-    object Key3 : InventoryItem(Drawable("arrow_right.png"))
+sealed class InventoryItem(val drawable: Drawable, val event: Event) {
+    object Key : InventoryItem(Drawable("arrow_down.png"), Event.INVENTORY_KEY_CLICKED)
+    object Phone : InventoryItem(Drawable("icon_phone.jpg"), Event.INVENTORY_PHONE_CLICKED)
+    object Charger : InventoryItem(Drawable("arrow_right.png"), Event.INVENTORY_CHARGER_CLICKED)
+    object Screwdriver : InventoryItem(Drawable("arrow_right.png"), Event.INVENTORY_SCREWDRIVER_CLICKED)
 }
 
 data class Drawable(val resourceId: String)
