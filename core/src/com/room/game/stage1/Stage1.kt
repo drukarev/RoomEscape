@@ -28,34 +28,131 @@ class Stage1 : Stage, EventHandler.Listener {
 
     override fun onEvent(event: Event) {
         when (event) {
-            Event.LOCKER_TRIED_TO_OPEN -> TODO()
-            Event.PHONE_FROM_LOCKER_TAKEN -> TODO()
-            Event.PHONE_PUT_ON_HOLDER -> TODO()
-            Event.KEY_FROM_SNOWMAN_TAKEN -> TODO()
-            Event.DESK_LOCKER_OPENED -> TODO()
-            Event.CHARGER_TAKEN -> TODO()
-            Event.CHARGER_CONNECTED -> TODO()
-            Event.FIX_BUG_BUTTON_CLICKED -> TODO()
-            Event.SCREWDRIVER_TAKEN -> TODO()
-            Event.LEFT_SCREW_UNSCREWED -> TODO()
-            Event.RIGHT_SCREW_UNSCREWED -> TODO()
-            Event.ROUTER_TURNED_ON -> TODO()
-            Event.DEPLOY_BUTTON_CLICKED -> TODO()
 
-            Event.LOCKER_CLICKED -> TODO()
-            Event.POWER_SOCKET_ITEM_CLICKED -> TODO()
-            Event.PHONE_STAND_ITEM_CLICKED -> TODO()
-            Event.NOTEBOOK_CLICKED -> TODO()
+        // Locker screen
+
+            Event.PHONE_FROM_LOCKER_TAKEN -> {
+                LockerScreen.screenObjects.remove(LockerScreen.PhoneItem)
+                backpack.add(InventoryItem.Phone)
+            }
+
+            Event.LOCKER_TRIED_TO_OPEN -> {
+                if (selectedItem == InventoryItem.Key) { //TODO
+                    LockerScreen.screenObjects.remove(LockerScreen.LockerDoorClosed)
+                } else {
+                    showText("Wrong password.")
+                }
+            }
+
+            Event.LOCKER_CLICKED -> {
+                if (LockerScreen.screenObjects.find { it == LockerScreen.LockerDoorClosed } != null) {
+                    showText("That's a stand with mobile phones. It is locked.")
+                }
+            }
+
+        // Workplace screen
+
+            Event.DESK_LOCKER_ITEM_CLICKED -> {
+                if (selectedItem == InventoryItem.Key) {
+                    backpack.remove(InventoryItem.Key)
+                    WorkplaceScreen.screenObjects.add(WorkplaceScreen.DeskLockerShelfItem)
+                    WorkplaceScreen.screenObjects.add(WorkplaceScreen.ChargerItem)
+                } else {
+                    showText("This locker is closed.")
+                }
+            }
+
+            Event.PHONE_HOLDER_CLICKED -> {
+                if (selectedItem == InventoryItem.Phone) {
+                    backpack.remove(InventoryItem.Phone)
+                    WorkplaceScreen.screenObjects.remove(WorkplaceScreen.PhoneHolderItem)
+                    WorkplaceScreen.screenObjects.add(WorkplaceScreen.PhoneHolderWithMobileItem)
+                } else {
+                    showText("Looks like a phone holder.")
+                }
+            }
+
+            Event.POWER_SOCKET_ITEM_CLICKED -> {
+                if (selectedItem == InventoryItem.Charger) {
+                    backpack.remove(InventoryItem.Charger)
+                    WorkplaceScreen.screenObjects.add(WorkplaceScreen.ConnectedChargerItem)
+                }
+            }
+
+            Event.NOTEBOOK_CLICKED -> {
+                if (WorkplaceScreen.screenObjects.find { it == WorkplaceScreen.ConnectedChargerItem } != null) {
+                    //TODO: open notebook
+                }
+            }
+
+            Event.CHARGER_TAKEN -> {
+                WorkplaceScreen.screenObjects.remove(WorkplaceScreen.ChargerItem)
+                backpack.add(InventoryItem.Charger)
+            }
+
+            Event.FIX_BUG_BUTTON_CLICKED -> {
+                //TODO
+            }
+
+        // Snowman screen
+
+            Event.KEY_FROM_SNOWMAN_TAKEN -> {
+                SnowmanScreen.screenObjects.remove(SnowmanScreen.KeyItem)
+                backpack.add(InventoryItem.Key)
+            }
+
+            Event.SCREWDRIVER_TAKEN -> {
+                WorkplaceScreen.screenObjects.remove(SnowmanScreen.ScrewdriverItem)
+                backpack.add(InventoryItem.Screwdriver)
+            }
+
+        // WhiteBoardScreen
+
+            Event.MARKERS_CLICKED -> {
+                showText("Hmmmm...")
+            }
+
+            Event.LEFT_SCREW_UNSCREWED -> {
+                WhiteBoardScreen.screenObjects.remove(WhiteBoardScreen.LeftScrewItem)
+                if (WhiteBoardScreen.screenObjects.find { it == WhiteBoardScreen.RightScrewItem } == null) {
+                    WhiteBoardScreen.screenObjects.remove(WhiteBoardScreen.TvItem) //TODO: add broken TV
+                }
+            }
+            Event.RIGHT_SCREW_UNSCREWED -> {
+                WhiteBoardScreen.screenObjects.remove(WhiteBoardScreen.RightScrewItem)
+                if (WhiteBoardScreen.screenObjects.find { it == WhiteBoardScreen.LeftScrewItem } == null) {
+                    WhiteBoardScreen.screenObjects.remove(WhiteBoardScreen.TvItem) //TODO: add broken TV
+                }
+            }
+
+            Event.ROUTER_CLICKED -> {
+                WhiteBoardScreen.screenObjects.add(WhiteBoardScreen.RouterLightBulbItem)
+                showText("Turned wi-fi on.")
+            }
+            Event.DEPLOY_BUTTON_CLICKED -> {
+                if (WhiteBoardScreen.screenObjects.find { it == WhiteBoardScreen.RouterLightBulbItem } != null) {
+                    showText("Congratulations!")
+                }
+            }
+
+        // UI buttons
 
             Event.LEFT_ARROW_CLICKED -> setCurrentScreen(ArrowDirection.LEFT)
             Event.RIGHT_ARROW_CLICKED -> setCurrentScreen(ArrowDirection.RIGHT)
             Event.DOWN_ARROW_CLICKED -> setCurrentScreen(ArrowDirection.DOWN)
 
-            Event.INVENTORY_PHONE_CLICKED -> TODO()
-            Event.INVENTORY_KEY_CLICKED -> TODO()
-            Event.INVENTORY_SCREWDRIVER_CLICKED -> TODO()
-            Event.INVENTORY_CHARGER_CLICKED -> TODO()
+        // Inventory items
+
+            Event.INVENTORY_PHONE_CLICKED -> selectedItem = InventoryItem.Phone
+            Event.INVENTORY_KEY_CLICKED -> selectedItem = InventoryItem.Key
+            Event.INVENTORY_SCREWDRIVER_CLICKED -> selectedItem = InventoryItem.Screwdriver
+            Event.INVENTORY_CHARGER_CLICKED -> selectedItem = InventoryItem.Charger
         }
+        selectedItem = null
+    }
+
+    fun showText(text: String) {
+
     }
 
     class LeftArrowItem : ScreenItem(
@@ -75,15 +172,14 @@ class Stage1 : Stage, EventHandler.Listener {
             event = Event.RIGHT_ARROW_CLICKED
     )
 
-//    class DownArrowItem() : ScreenItem(
-//            drawable = Drawable("arrow_down.png"),
-//            onClick = { onClickAction() },
-//            x = 1830f,
-//            y = 530f,
-//            width = 80f,
-//            height = 80f,
-//            event = Event.DOWN_ARROW_CLICKED
-//    )
+    class DownArrowItem() : ScreenItem(
+            drawable = Drawable("arrow_down.png"),
+            x = 1830f,
+            y = 530f,
+            width = 80f,
+            height = 80f,
+            event = Event.DOWN_ARROW_CLICKED
+    )
 }
 
 enum class ArrowDirection {
@@ -93,24 +189,24 @@ enum class ArrowDirection {
 }
 
 enum class Event {
-    LOCKER_TRIED_TO_OPEN,
-    PHONE_FROM_LOCKER_TAKEN,
-    PHONE_PUT_ON_HOLDER,
-    KEY_FROM_SNOWMAN_TAKEN,
-    DESK_LOCKER_OPENED,
-    CHARGER_TAKEN,
-    CHARGER_CONNECTED,
-    FIX_BUG_BUTTON_CLICKED,
     SCREWDRIVER_TAKEN,
+    KEY_FROM_SNOWMAN_TAKEN,
+    PHONE_FROM_LOCKER_TAKEN,
+    CHARGER_TAKEN,
+
+    LOCKER_TRIED_TO_OPEN,
+    PHONE_HOLDER_CLICKED,
+    FIX_BUG_BUTTON_CLICKED,
     LEFT_SCREW_UNSCREWED,
     RIGHT_SCREW_UNSCREWED,
-    ROUTER_TURNED_ON,
+    ROUTER_CLICKED,
     DEPLOY_BUTTON_CLICKED,
 
     LOCKER_CLICKED,
     POWER_SOCKET_ITEM_CLICKED,
-    PHONE_STAND_ITEM_CLICKED,
     NOTEBOOK_CLICKED,
+    DESK_LOCKER_ITEM_CLICKED,
+    MARKERS_CLICKED,
 
     LEFT_ARROW_CLICKED,
     RIGHT_ARROW_CLICKED,
@@ -140,7 +236,61 @@ object WhiteBoardScreen : Screen {
     override val rightScreen: Screen = LockerScreen
     override val downScreen: Screen? = null
     override val background: Drawable = Drawable("background1.jpg")
-    override val screenObjects: List<ScreenItem> = listOf()
+    override val screenObjects: MutableList<ScreenItem> = mutableListOf(TvItem, LeftScrewItem, RightScrewItem, RouterItem)
+
+    object LeftScrewItem : ScreenItem(
+            drawable = Drawable("icon_phone.jpg"),  //TODO: replace
+            x = 1000f,
+            y = 200f,
+            width = 160f,
+            height = 160f,
+            event = Event.LEFT_SCREW_UNSCREWED
+    )
+
+    object RightScrewItem : ScreenItem(
+            drawable = Drawable("icon_phone.jpg"),  //TODO: replace
+            x = 1000f,
+            y = 200f,
+            width = 160f,
+            height = 160f,
+            event = Event.RIGHT_SCREW_UNSCREWED
+    )
+
+    object TvItem : ScreenItem(
+            drawable = Drawable("icon_phone.jpg"),  //TODO: replace
+            x = 1000f,
+            y = 200f,
+            width = 160f,
+            height = 160f,
+            event = Event.PHONE_FROM_LOCKER_TAKEN
+    )
+
+    object RouterItem : ScreenItem(
+            drawable = Drawable("icon_phone.jpg"),  //TODO: replace
+            x = 1000f,
+            y = 200f,
+            width = 160f,
+            height = 160f,
+            event = Event.ROUTER_CLICKED
+    )
+
+    object RouterLightBulbItem : ScreenItem(
+            drawable = Drawable("icon_phone.jpg"),  //TODO: replace
+            x = 1000f,
+            y = 200f,
+            width = 160f,
+            height = 160f,
+            event = null
+    )
+
+    object Markers : ScreenItem(
+            drawable = Drawable("icon_phone.jpg"),  //TODO: replace
+            x = 1000f,
+            y = 200f,
+            width = 160f,
+            height = 160f,
+            event = Event.MARKERS_CLICKED
+    )
 }
 
 object LockerScreen : Screen {
@@ -148,9 +298,9 @@ object LockerScreen : Screen {
     override val rightScreen: Screen = SnowmanScreen
     override val downScreen: Screen? = null
     override val background: Drawable = Drawable("background2.jpg")
-    override val screenObjects: List<ScreenItem> = listOf(PhoneItem(), LockerDoorClosed())
+    override val screenObjects: MutableList<ScreenItem> = mutableListOf(PhoneItem, LockerDoorClosed)
 
-    class PhoneItem : ScreenItem(
+    object PhoneItem : ScreenItem(
             drawable = Drawable("icon_phone.jpg"),
             x = 1000f,
             y = 200f,
@@ -159,7 +309,7 @@ object LockerScreen : Screen {
             event = Event.PHONE_FROM_LOCKER_TAKEN
     )
 
-    class LockItem() : ScreenItem(
+    object LockItem : ScreenItem(
             drawable = Drawable("icon_phone.jpg"), //TODO: replace
             x = 1000f,
             y = 200f,
@@ -168,7 +318,7 @@ object LockerScreen : Screen {
             event = Event.LOCKER_TRIED_TO_OPEN
     )
 
-    class LockerDoorClosed() : ScreenItem(
+    object LockerDoorClosed : ScreenItem(
             drawable = Drawable("icon_phone.jpg"), //TODO: replace
             x = 1000f,
             y = 200f,
@@ -192,15 +342,24 @@ object SnowmanScreen : Screen {
     override val rightScreen: Screen = WorkplaceScreen
     override val downScreen: Screen? = null
     override val background: Drawable = Drawable("background3.jpg")
-    override val screenObjects: List<ScreenItem> = listOf(KeyItem())
+    override val screenObjects: MutableList<ScreenItem> = mutableListOf(KeyItem)
 
-    class KeyItem : ScreenItem(
+    object KeyItem : ScreenItem(
             drawable = Drawable("icon_phone.jpg"), //TODO: replace
             x = 1000f,
             y = 200f,
             width = 160f,
             height = 160f,
             event = Event.KEY_FROM_SNOWMAN_TAKEN
+    )
+
+    object ScrewdriverItem : ScreenItem(
+            drawable = Drawable("icon_phone.jpg"), //TODO: replace
+            x = 1000f,
+            y = 200f,
+            width = 160f,
+            height = 160f,
+            event = Event.SCREWDRIVER_TAKEN
     )
 }
 
@@ -209,9 +368,9 @@ object WorkplaceScreen : Screen {
     override val rightScreen: Screen = WhiteBoardScreen
     override val downScreen: Screen? = null
     override val background: Drawable = Drawable("background4.jpg")
-    override val screenObjects: List<ScreenItem> = listOf(PowerSocketItem(), PhoneStandItem(), NotebookItem())
+    override val screenObjects: MutableList<ScreenItem> = mutableListOf(PowerSocketItem, PhoneHolderItem, NotebookItem)
 
-    class PowerSocketItem : ScreenItem(
+    object PowerSocketItem : ScreenItem(
             drawable = Drawable("icon_phone.jpg"), //TODO: replace
             x = 1000f,
             y = 200f,
@@ -220,21 +379,66 @@ object WorkplaceScreen : Screen {
             event = Event.POWER_SOCKET_ITEM_CLICKED
     )
 
-    class PhoneStandItem : ScreenItem(
+    object PhoneHolderItem : ScreenItem(
             drawable = Drawable("icon_phone.jpg"), //TODO: replace
             x = 1000f,
             y = 200f,
             width = 160f,
             height = 160f,
-            event = Event.PHONE_STAND_ITEM_CLICKED
+            event = Event.PHONE_HOLDER_CLICKED
     )
 
-    class NotebookItem : ScreenItem(
+    object PhoneHolderWithMobileItem : ScreenItem(
+            drawable = Drawable("icon_phone.jpg"), //TODO: replace
+            x = 1000f,
+            y = 200f,
+            width = 160f,
+            height = 160f,
+            event = null
+    )
+
+    object NotebookItem : ScreenItem(
             drawable = Drawable("icon_phone.jpg"), //TODO: replace
             x = 1000f,
             y = 200f,
             width = 160f,
             height = 160f,
             event = Event.NOTEBOOK_CLICKED
+    )
+
+    object ConnectedChargerItem : ScreenItem(
+            drawable = Drawable("icon_phone.jpg"), //TODO: replace
+            x = 1000f,
+            y = 200f,
+            width = 160f,
+            height = 160f,
+            event = null
+    )
+
+    object DeskLockerItem : ScreenItem(
+            drawable = Drawable("icon_phone.jpg"), //TODO: replace
+            x = 1000f,
+            y = 200f,
+            width = 160f,
+            height = 160f,
+            event = Event.DESK_LOCKER_ITEM_CLICKED
+    )
+
+    object DeskLockerShelfItem : ScreenItem(
+            drawable = Drawable("icon_phone.jpg"), //TODO: replace
+            x = 1000f,
+            y = 200f,
+            width = 160f,
+            height = 160f,
+            event = null
+    )
+
+    object ChargerItem : ScreenItem(
+            drawable = Drawable("icon_phone.jpg"), //TODO: replace
+            x = 1000f,
+            y = 200f,
+            width = 160f,
+            height = 160f,
+            event = Event.CHARGER_TAKEN
     )
 }
