@@ -21,7 +21,10 @@ import com.badlogic.gdx.utils.viewport.FitViewport
 import com.room.game.stage1.Stage1
 import com.badlogic.gdx.scenes.scene2d.Stage as LibgdxStage
 import com.badlogic.gdx.math.Vector3
-import com.room.game.stage1.EventHandler
+import com.room.game.core.EventHandler
+import com.room.game.core.ScreenItem
+import com.room.game.core.Stage
+import com.room.game.core.StageUiHandler
 
 class RoomEscape : ApplicationAdapter(), StageUiHandler {
 
