@@ -1,22 +1,39 @@
 package com.room.game.stage1
 
 import com.room.game.*
-import com.room.game.InventoryItem.Key
-import com.room.game.InventoryItem.Phone
+import javafx.collections.ModifiableObservableListBase
 import java.util.*
 
-class Stage1 : Stage, EventHandler.Listener {
+class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener {
     override val ui: MutableList<ScreenItem> = mutableListOf(
             LeftArrowItem(),
             RightArrowItem())
     override val floor: Screen? = null
     override val ceiling: Screen? = null
-    override val screens: LinkedList<Screen> = LinkedList(listOf(WhiteBoardScreen, LockerScreen, SnowmanScreen, WorkplaceScreen))
-    override val backpack: MutableList<InventoryItem> = mutableListOf(Key, Phone)
 
-    override var currentScreen: Screen = screens.first
+    private val whiteBoardScreen = WhiteBoardScreen(null, null, null, stageUiHandler)
+    private val snowmanScreen = SnowmanScreen(null, null, null, stageUiHandler)
+    private val lockerScreen = LockerScreen(whiteBoardScreen, snowmanScreen, null, stageUiHandler)
+    private val workplaceScreen = WorkplaceScreen(snowmanScreen, whiteBoardScreen, null, stageUiHandler)
+
+    init {
+        whiteBoardScreen.leftScreen = workplaceScreen
+        whiteBoardScreen.rightScreen = lockerScreen
+
+        snowmanScreen.leftScreen = lockerScreen
+        snowmanScreen.rightScreen = workplaceScreen
+    }
+
+    override val screens = listOf(whiteBoardScreen, lockerScreen, snowmanScreen, workplaceScreen)
+    override val backpack: MutableList<InventoryItem> = mutableListOf()
+
+    override var currentScreen: Screen = screens.first()
 
     private var selectedItem: InventoryItem? = null
+
+    init {
+        prepareForCurrentScreen()
+    }
 
     private fun setCurrentScreen(arrowDirection: ArrowDirection) {
         currentScreen = when (arrowDirection) {
@@ -24,6 +41,15 @@ class Stage1 : Stage, EventHandler.Listener {
             ArrowDirection.RIGHT -> currentScreen.rightScreen ?: currentScreen
             ArrowDirection.DOWN -> currentScreen.downScreen ?: currentScreen
         }
+        prepareForCurrentScreen()
+    }
+
+    private fun prepareForCurrentScreen() {
+        stageUiHandler.removeAllScreenItems()
+        currentScreen.screenObjects.forEach {
+            stageUiHandler.addScreenItem(it)
+        }
+        ui.forEach { stageUiHandler.addScreenItem(it) }
     }
 
     override fun onEvent(event: Event) {
@@ -32,20 +58,20 @@ class Stage1 : Stage, EventHandler.Listener {
         // Locker screen
 
             Event.PHONE_FROM_LOCKER_TAKEN -> {
-                LockerScreen.screenObjects.remove(LockerScreen.PhoneItem)
+                lockerScreen.screenObjects.remove(LockerScreen.PhoneItem)
                 backpack.add(InventoryItem.Phone)
             }
 
-            Event.LOCKER_TRIED_TO_OPEN -> {
+            Event.LOCKER_LOCK_CLICKED -> {
                 if (selectedItem == InventoryItem.Key) { //TODO
-                    LockerScreen.screenObjects.remove(LockerScreen.LockerDoorClosed)
+                    lockerScreen.screenObjects.remove(LockerScreen.LockerDoorClosed)
                 } else {
                     showText("Wrong password.")
                 }
             }
 
             Event.LOCKER_CLICKED -> {
-                if (LockerScreen.screenObjects.find { it == LockerScreen.LockerDoorClosed } != null) {
+                if (lockerScreen.screenObjects.find { it == LockerScreen.LockerDoorClosed } != null) {
                     showText("That's a stand with mobile phones. It is locked.")
                 }
             }
@@ -55,8 +81,8 @@ class Stage1 : Stage, EventHandler.Listener {
             Event.DESK_LOCKER_ITEM_CLICKED -> {
                 if (selectedItem == InventoryItem.Key) {
                     backpack.remove(InventoryItem.Key)
-                    WorkplaceScreen.screenObjects.add(WorkplaceScreen.DeskLockerShelfItem)
-                    WorkplaceScreen.screenObjects.add(WorkplaceScreen.ChargerItem)
+                    workplaceScreen.screenObjects.add(WorkplaceScreen.DeskLockerShelfItem)
+                    workplaceScreen.screenObjects.add(WorkplaceScreen.ChargerItem)
                 } else {
                     showText("This locker is closed.")
                 }
@@ -65,8 +91,8 @@ class Stage1 : Stage, EventHandler.Listener {
             Event.PHONE_HOLDER_CLICKED -> {
                 if (selectedItem == InventoryItem.Phone) {
                     backpack.remove(InventoryItem.Phone)
-                    WorkplaceScreen.screenObjects.remove(WorkplaceScreen.PhoneHolderItem)
-                    WorkplaceScreen.screenObjects.add(WorkplaceScreen.PhoneHolderWithMobileItem)
+                    workplaceScreen.screenObjects.remove(WorkplaceScreen.PhoneHolderItem)
+                    workplaceScreen.screenObjects.add(WorkplaceScreen.PhoneHolderWithMobileItem)
                 } else {
                     showText("Looks like a phone holder.")
                 }
@@ -75,18 +101,18 @@ class Stage1 : Stage, EventHandler.Listener {
             Event.POWER_SOCKET_ITEM_CLICKED -> {
                 if (selectedItem == InventoryItem.Charger) {
                     backpack.remove(InventoryItem.Charger)
-                    WorkplaceScreen.screenObjects.add(WorkplaceScreen.ConnectedChargerItem)
+                    workplaceScreen.screenObjects.add(WorkplaceScreen.ConnectedChargerItem)
                 }
             }
 
             Event.NOTEBOOK_CLICKED -> {
-                if (WorkplaceScreen.screenObjects.find { it == WorkplaceScreen.ConnectedChargerItem } != null) {
+                if (workplaceScreen.screenObjects.find { it == WorkplaceScreen.ConnectedChargerItem } != null) {
                     //TODO: open notebook
                 }
             }
 
             Event.CHARGER_TAKEN -> {
-                WorkplaceScreen.screenObjects.remove(WorkplaceScreen.ChargerItem)
+                workplaceScreen.screenObjects.remove(WorkplaceScreen.ChargerItem)
                 backpack.add(InventoryItem.Charger)
             }
 
@@ -97,12 +123,12 @@ class Stage1 : Stage, EventHandler.Listener {
         // Snowman screen
 
             Event.KEY_FROM_SNOWMAN_TAKEN -> {
-                SnowmanScreen.screenObjects.remove(SnowmanScreen.KeyItem)
+                snowmanScreen.screenObjects.remove(SnowmanScreen.KeyItem)
                 backpack.add(InventoryItem.Key)
             }
 
             Event.SCREWDRIVER_TAKEN -> {
-                WorkplaceScreen.screenObjects.remove(SnowmanScreen.ScrewdriverItem)
+                snowmanScreen.screenObjects.remove(SnowmanScreen.ScrewdriverItem)
                 backpack.add(InventoryItem.Screwdriver)
             }
 
@@ -113,24 +139,24 @@ class Stage1 : Stage, EventHandler.Listener {
             }
 
             Event.LEFT_SCREW_UNSCREWED -> {
-                WhiteBoardScreen.screenObjects.remove(WhiteBoardScreen.LeftScrewItem)
-                if (WhiteBoardScreen.screenObjects.find { it == WhiteBoardScreen.RightScrewItem } == null) {
-                    WhiteBoardScreen.screenObjects.remove(WhiteBoardScreen.TvItem) //TODO: add broken TV
+                whiteBoardScreen.screenObjects.remove(WhiteBoardScreen.LeftScrewItem)
+                if (whiteBoardScreen.screenObjects.find { it == WhiteBoardScreen.RightScrewItem } == null) {
+                    whiteBoardScreen.screenObjects.remove(WhiteBoardScreen.TvItem) //TODO: add broken TV
                 }
             }
             Event.RIGHT_SCREW_UNSCREWED -> {
-                WhiteBoardScreen.screenObjects.remove(WhiteBoardScreen.RightScrewItem)
-                if (WhiteBoardScreen.screenObjects.find { it == WhiteBoardScreen.LeftScrewItem } == null) {
-                    WhiteBoardScreen.screenObjects.remove(WhiteBoardScreen.TvItem) //TODO: add broken TV
+                whiteBoardScreen.screenObjects.remove(WhiteBoardScreen.RightScrewItem)
+                if (whiteBoardScreen.screenObjects.find { it == WhiteBoardScreen.LeftScrewItem } == null) {
+                    whiteBoardScreen.screenObjects.remove(WhiteBoardScreen.TvItem) //TODO: add broken TV
                 }
             }
 
             Event.ROUTER_CLICKED -> {
-                WhiteBoardScreen.screenObjects.add(WhiteBoardScreen.RouterLightBulbItem)
+                whiteBoardScreen.screenObjects.add(WhiteBoardScreen.RouterLightBulbItem)
                 showText("Turned wi-fi on.")
             }
             Event.DEPLOY_BUTTON_CLICKED -> {
-                if (WhiteBoardScreen.screenObjects.find { it == WhiteBoardScreen.RouterLightBulbItem } != null) {
+                if (whiteBoardScreen.screenObjects.find { it == WhiteBoardScreen.RouterLightBulbItem } != null) {
                     showText("Congratulations!")
                 }
             }
@@ -194,7 +220,7 @@ enum class Event {
     PHONE_FROM_LOCKER_TAKEN,
     CHARGER_TAKEN,
 
-    LOCKER_TRIED_TO_OPEN,
+    LOCKER_LOCK_CLICKED,
     PHONE_HOLDER_CLICKED,
     FIX_BUG_BUTTON_CLICKED,
     LEFT_SCREW_UNSCREWED,
@@ -231,12 +257,15 @@ class EventHandler(val listeners: List<Listener>) {
     }
 }
 
-object WhiteBoardScreen : Screen {
-    override val leftScreen: Screen = WorkplaceScreen
-    override val rightScreen: Screen = LockerScreen
-    override val downScreen: Screen? = null
+class WhiteBoardScreen(
+        leftScreen: Screen?,
+        rightScreen: Screen?,
+        downScreen: Screen?,
+        uiHandler: StageUiHandler,
+        screenObjects: MutableList<ScreenItem> = mutableListOf(TvItem, LeftScrewItem, RightScrewItem, RouterItem)
+) : Screen(leftScreen, rightScreen, downScreen, screenObjects, uiHandler) {
+
     override val background: Drawable = Drawable("background1.jpg")
-    override val screenObjects: MutableList<ScreenItem> = mutableListOf(TvItem, LeftScrewItem, RightScrewItem, RouterItem)
 
     object LeftScrewItem : ScreenItem(
             drawable = Drawable("icon_phone.jpg"),  //TODO: replace
@@ -293,19 +322,22 @@ object WhiteBoardScreen : Screen {
     )
 }
 
-object LockerScreen : Screen {
-    override val leftScreen: Screen = WhiteBoardScreen
-    override val rightScreen: Screen = SnowmanScreen
-    override val downScreen: Screen? = null
+class LockerScreen(
+        leftScreen: Screen?,
+        rightScreen: Screen?,
+        downScreen: Screen?,
+        uiHandler: StageUiHandler,
+        screenObjects: MutableList<ScreenItem> = mutableListOf(PhoneItem, LockerDoorClosed)
+) : Screen(leftScreen, rightScreen, downScreen, screenObjects, uiHandler) {
+
     override val background: Drawable = Drawable("background2.jpg")
-    override val screenObjects: MutableList<ScreenItem> = mutableListOf(PhoneItem, LockerDoorClosed)
 
     object PhoneItem : ScreenItem(
             drawable = Drawable("icon_phone.jpg"),
             x = 1000f,
             y = 200f,
-            width = 160f,
-            height = 160f,
+            width = 500f,
+            height = 500f,
             event = Event.PHONE_FROM_LOCKER_TAKEN
     )
 
@@ -315,7 +347,7 @@ object LockerScreen : Screen {
             y = 200f,
             width = 160f,
             height = 160f,
-            event = Event.LOCKER_TRIED_TO_OPEN
+            event = Event.LOCKER_LOCK_CLICKED
     )
 
     object LockerDoorClosed : ScreenItem(
@@ -337,12 +369,15 @@ object LockerScreen : Screen {
     )
 }
 
-object SnowmanScreen : Screen {
-    override val leftScreen: Screen = LockerScreen
-    override val rightScreen: Screen = WorkplaceScreen
-    override val downScreen: Screen? = null
+class SnowmanScreen(
+        leftScreen: Screen?,
+        rightScreen: Screen?,
+        downScreen: Screen?,
+        uiHandler: StageUiHandler,
+        screenObjects: MutableList<ScreenItem> = mutableListOf(KeyItem)
+) : Screen(leftScreen, rightScreen, downScreen, screenObjects, uiHandler) {
+
     override val background: Drawable = Drawable("background3.jpg")
-    override val screenObjects: MutableList<ScreenItem> = mutableListOf(KeyItem)
 
     object KeyItem : ScreenItem(
             drawable = Drawable("icon_phone.jpg"), //TODO: replace
@@ -363,12 +398,15 @@ object SnowmanScreen : Screen {
     )
 }
 
-object WorkplaceScreen : Screen {
-    override val leftScreen: Screen = SnowmanScreen
-    override val rightScreen: Screen = WhiteBoardScreen
-    override val downScreen: Screen? = null
+class WorkplaceScreen(
+        leftScreen: Screen?,
+        rightScreen: Screen?,
+        downScreen: Screen?,
+        uiHandler: StageUiHandler,
+        screenObjects: MutableList<ScreenItem> = mutableListOf(PowerSocketItem, PhoneHolderItem, NotebookItem)
+) : Screen(leftScreen, rightScreen, downScreen, screenObjects, uiHandler) {
+
     override val background: Drawable = Drawable("background4.jpg")
-    override val screenObjects: MutableList<ScreenItem> = mutableListOf(PowerSocketItem, PhoneHolderItem, NotebookItem)
 
     object PowerSocketItem : ScreenItem(
             drawable = Drawable("icon_phone.jpg"), //TODO: replace
@@ -441,4 +479,28 @@ object WorkplaceScreen : Screen {
             height = 160f,
             event = Event.CHARGER_TAKEN
     )
+}
+
+class ArrayObservableList<E> : ModifiableObservableListBase<E>() {
+
+    val delegate = ArrayList<E>()
+
+    override val size: Int
+        get() = delegate.size
+
+    override fun doRemove(index: Int): E {
+        return delegate.removeAt(index)
+    }
+
+    override fun doSet(index: Int, element: E): E {
+        return delegate.set(index, element)
+    }
+
+    override fun doAdd(index: Int, element: E) {
+        delegate.add(index, element)
+    }
+
+    override fun get(index: Int): E {
+        return delegate[index]
+    }
 }

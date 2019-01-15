@@ -1,23 +1,47 @@
 package com.room.game
 
+import com.room.game.stage1.ArrayObservableList
 import com.room.game.stage1.Event
-import java.util.*
+import javafx.collections.ListChangeListener
 
 interface Stage {
     val floor: Screen?
     val ceiling: Screen?
-    val screens: LinkedList<Screen>
+    val screens: List<Screen>
     val backpack: List<InventoryItem>
     val ui: List<ScreenItem>
     val currentScreen: Screen
 }
 
-interface Screen {
-    val background: Drawable
-    val screenObjects: List<ScreenItem>
-    val leftScreen: Screen?
-    val rightScreen: Screen?
-    val downScreen: Screen?
+interface StageUiHandler {
+    fun addScreenItem(screenItem: ScreenItem)
+    fun removeScreenItem(screenItem: ScreenItem)
+    fun removeAllScreenItems()
+}
+
+abstract class Screen(
+        var leftScreen: Screen?,
+        var rightScreen: Screen?,
+        var downScreen: Screen?,
+        screenObjectsList: MutableList<ScreenItem>,
+        uiHandler: StageUiHandler
+) {
+    abstract val background: Drawable
+    val screenObjects: ArrayObservableList<ScreenItem> = ArrayObservableList<ScreenItem>().apply {
+        addAll(screenObjectsList)
+        addListener(ListChangeListener {
+            it.next()
+            if (it.wasRemoved()) {
+                it.removed.forEach {
+                    uiHandler.removeScreenItem(it)
+                }
+            } else if (it.wasAdded()) {
+                it.addedSubList.forEach {
+                    uiHandler.addScreenItem(it)
+                }
+            }
+        })
+    }
 }
 
 open class ScreenItem(

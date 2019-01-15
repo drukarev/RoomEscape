@@ -23,7 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage as LibgdxStage
 import com.badlogic.gdx.math.Vector3
 import com.room.game.stage1.EventHandler
 
-class RoomEscape : ApplicationAdapter() {
+class RoomEscape : ApplicationAdapter(), StageUiHandler {
 
     private lateinit var batch: SpriteBatch
     private lateinit var currentStage: Stage
@@ -40,12 +40,12 @@ class RoomEscape : ApplicationAdapter() {
 
     override fun create() {
         batch = SpriteBatch()
-        currentStage = Stage1()
         shapeRenderer = ShapeRenderer()
         camera = OrthographicCamera()
         viewport = FitViewport(1920f, 1080f, camera)
         libgdxStage = LibgdxStage(viewport)
 
+        currentStage = Stage1(this)
         eventHandler = EventHandler(listOf(currentStage as EventHandler.Listener))
 
         val inputMultiplexer = InputMultiplexer()
@@ -99,14 +99,6 @@ class RoomEscape : ApplicationAdapter() {
             end()
         }
 
-        libgdxStage.actors.removeAll { true }
-
-        //TODO: don't add objects that are already here
-        currentStage.currentScreen.screenObjects.forEach {
-            addUiElement(it)
-        }
-        currentStage.ui.forEach { addUiElement(it) }
-
         drawInventory()
 
         libgdxStage.act()
@@ -126,7 +118,7 @@ class RoomEscape : ApplicationAdapter() {
             margin += 200f
             ScreenItem(it.drawable, viewport.worldWidth - 200f, viewport.worldHeight - margin, 160f, 160f, it.event)
         }.forEach {
-            addUiElement(it)
+            addScreenItem(it)
         }
     }
 
@@ -138,10 +130,12 @@ class RoomEscape : ApplicationAdapter() {
 
     override fun dispose() {
         batch.dispose()
-        //TODO: dispose of all textures
+        libgdxStage.dispose()
     }
 
-    private fun addUiElement(screenItem: ScreenItem): ImageButton {
+    private val screenItems: MutableMap<ScreenItem, ImageButton> = mutableMapOf()
+
+    override fun addScreenItem(screenItem: ScreenItem) {
         val textureRegion = TextureRegion(Texture(screenItem.drawable.resourceId))
         val textureRegionDrawable = TextureRegionDrawable(textureRegion)
         val button = ImageButton(textureRegionDrawable)
@@ -156,7 +150,17 @@ class RoomEscape : ApplicationAdapter() {
         button.setPosition(screenItem.x, screenItem.y)
         button.setSize(screenItem.width, screenItem.height)
         libgdxStage.addActor(button)
-        return button
+        screenItems[screenItem] = button
+    }
+
+    override fun removeScreenItem(screenItem: ScreenItem) {
+        libgdxStage.actors.removeValue(screenItems.getValue(screenItem), true)
+        screenItems.remove(screenItem)
+    }
+
+    override fun removeAllScreenItems() {
+        libgdxStage.actors.removeAll { true }
+        screenItems.clear()
     }
 
     private inner class GestureListener : GestureDetector.GestureListener {
