@@ -10,3 +10,9 @@ open class ScreenItem(
         val height: Float,
         val event: Event?
 )
+
+open class ScreenText(
+        val text: String,
+        val x: Float = 100f,
+        val y: Float = 100f
+)

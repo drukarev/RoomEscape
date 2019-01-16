@@ -6,10 +6,7 @@ import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.graphics.*
-import com.badlogic.gdx.graphics.g2d.Animation
-import com.badlogic.gdx.graphics.g2d.Sprite
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.graphics.g2d.*
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.input.GestureDetector
 import com.badlogic.gdx.math.Vector2
@@ -21,10 +18,11 @@ import com.badlogic.gdx.utils.viewport.FitViewport
 import com.room.game.stage1.Stage1
 import com.badlogic.gdx.scenes.scene2d.Stage as LibgdxStage
 import com.badlogic.gdx.math.Vector3
-import com.room.game.core.EventHandler
-import com.room.game.core.ScreenItem
-import com.room.game.core.Stage
-import com.room.game.core.StageUiHandler
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import com.badlogic.gdx.utils.Timer
+import com.room.game.core.*
 
 class RoomEscape : ApplicationAdapter(), StageUiHandler {
 
@@ -156,9 +154,37 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
         screenItems[screenItem] = button
     }
 
+    override fun addScreenText(screenText: ScreenText) {
+        val style = Label.LabelStyle()
+        style.font = BitmapFont()
+        val label = Label(screenText.text, style)
+        label.setPosition(screenText.x, screenText.y)
+        label.setFontScale(5f, 5f)
+        label.setColor(0f,0f,0f,1f)
+        label.addAction(Actions.fadeIn(0.2f))
+        libgdxStage.addActor(label)
+        Timer.schedule(object : Timer.Task() {
+            override fun run() {
+                label.addAction(Actions.fadeOut(0.2f))
+            }
+        }, 2f)
+        Timer.schedule(object : Timer.Task() {
+            override fun run() {
+                libgdxStage.actors.removeValue(label, true)
+            }
+        }, 2.3f)
+    }
+
     override fun removeScreenItem(screenItem: ScreenItem) {
-        libgdxStage.actors.removeValue(screenItems.getValue(screenItem), true)
-        screenItems.remove(screenItem)
+        val actor = screenItems.getValue(screenItem)
+        actor.addAction(Actions.fadeOut(0.1f))
+        Timer.schedule(object : Timer.Task() {
+            override fun run() {
+                libgdxStage.actors.removeValue(actor, true)
+                screenItems.remove(screenItem)
+            }
+
+        }, 0.1f)
     }
 
     override fun removeAllScreenItems() {

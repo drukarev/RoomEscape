@@ -37,8 +37,8 @@ class LockerScreen(
             drawable = Drawable("icon_phone.jpg"), //TODO: replace
             x = 1000f,
             y = 200f,
-            width = 0f,
-            height = 0f,
+            width = 1000f,
+            height = 1000f,
             event = Event.LOCKER_CLICKED
     )
 

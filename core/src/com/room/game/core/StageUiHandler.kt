@@ -4,4 +4,5 @@ interface StageUiHandler {
     fun addScreenItem(screenItem: ScreenItem)
     fun removeScreenItem(screenItem: ScreenItem)
     fun removeAllScreenItems()
+    fun addScreenText(screenText: ScreenText)
 }

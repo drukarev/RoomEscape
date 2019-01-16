@@ -188,8 +188,8 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
         selectedItem = null
     }
 
-    fun showText(text: String) {
-
+    private fun showText(text: String) {
+        stageUiHandler.addScreenText(ScreenText(text))
     }
 
     class LeftArrowItem : ScreenItem(
