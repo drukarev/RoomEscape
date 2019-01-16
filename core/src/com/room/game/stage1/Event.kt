@@ -1,6 +1,12 @@
 package com.room.game.stage1
 
 enum class Event {
+
+    //TitleScreen
+    START_GAME,
+    ICON_MUSIC_CLICKED,
+    ICON_SOUND_CLICKED,
+
     SCREWDRIVER_TAKEN,
     KEY_FROM_SNOWMAN_TAKEN,
     PHONE_FROM_LOCKER_TAKEN,

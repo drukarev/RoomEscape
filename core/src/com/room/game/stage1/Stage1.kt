@@ -9,6 +9,7 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
     override val floor: Screen? = null
     override val ceiling: Screen? = null
 
+    private val titleScreen = TitleScreen(uiHandler = stageUiHandler)
     private val whiteBoardScreen = WhiteBoardScreen(null, null, null, stageUiHandler)
     private val snowmanScreen = SnowmanScreen(null, null, null, stageUiHandler)
     private val lockerScreen = LockerScreen(whiteBoardScreen, snowmanScreen, null, stageUiHandler)
@@ -25,7 +26,7 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
     override val screens = listOf(whiteBoardScreen, lockerScreen, snowmanScreen, workplaceScreen)
     override val backpack: MutableList<InventoryItem> = mutableListOf()
 
-    override var currentScreen: Screen = screens.first()
+    override var currentScreen: Screen = titleScreen
 
     private var selectedItem: InventoryItem? = null
 
@@ -52,6 +53,18 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
 
     override fun onEvent(event: Event) {
         when (event) {
+
+        // Title screen
+
+            Event.START_GAME -> {
+                currentScreen = screens.first()
+            }
+            Event.ICON_MUSIC_CLICKED -> {
+                //TODO
+            }
+            Event.ICON_SOUND_CLICKED -> {
+                //TODO
+            }
 
         // Locker screen
 
