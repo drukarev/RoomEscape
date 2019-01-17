@@ -14,6 +14,8 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
     private val snowmanScreen = SnowmanScreen(null, null, null, stageUiHandler)
     private val lockerScreen = LockerScreen(whiteBoardScreen, snowmanScreen, null, stageUiHandler)
     private val workplaceScreen = WorkplaceScreen(snowmanScreen, whiteBoardScreen, null, stageUiHandler)
+    private val tabletScreen = TabletScreen(uiHandler = stageUiHandler, downScreen = lockerScreen)
+    private val notebookScreen = NotebookScreen(uiHandler = stageUiHandler, downScreen = workplaceScreen)
 
     init {
         whiteBoardScreen.leftScreen = workplaceScreen
@@ -54,7 +56,7 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
     override fun onEvent(event: Event) {
         when (event) {
 
-        // Title screen
+            // Title screen
 
             Event.START_GAME -> {
                 currentScreen = screens.first()
@@ -66,7 +68,7 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
                 //TODO
             }
 
-        // Locker screen
+            // Locker screen
 
             Event.PHONE_FROM_LOCKER_TAKEN -> {
                 lockerScreen.screenObjects.remove(LockerScreen.PhoneItem)
@@ -87,7 +89,39 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
                 }
             }
 
-        // Workplace screen
+            // Tablet screen
+
+            Event.NUMBER_1_BUTTON_CLICKED -> {
+                showText(tabletScreen.getPasscodeText('1'))
+            }
+            Event.NUMBER_2_BUTTON_CLICKED -> {
+                showText(tabletScreen.getPasscodeText('2'))
+            }
+            Event.NUMBER_3_BUTTON_CLICKED -> {
+                showText(tabletScreen.getPasscodeText('3'))
+            }
+            Event.NUMBER_4_BUTTON_CLICKED -> {
+                showText(tabletScreen.getPasscodeText('4'))
+            }
+            Event.NUMBER_5_BUTTON_CLICKED -> {
+                showText(tabletScreen.getPasscodeText('5'))
+            }
+            Event.NUMBER_6_BUTTON_CLICKED -> {
+                showText(tabletScreen.getPasscodeText('6'))
+            }
+            Event.NUMBER_7_BUTTON_CLICKED -> {
+                showText(tabletScreen.getPasscodeText('7'))
+            }
+            Event.NUMBER_8_BUTTON_CLICKED -> {
+                showText(tabletScreen.getPasscodeText('8'))
+            }
+            Event.NUMBER_9_BUTTON_CLICKED -> {
+                showText(tabletScreen.getPasscodeText('9'))
+            }
+
+            // TODO: add action for successful code verification
+
+            // Workplace screen
 
             Event.DESK_LOCKER_ITEM_CLICKED -> {
                 if (selectedItem == InventoryItem.Key) {
@@ -127,11 +161,32 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
                 backpack.add(InventoryItem.Charger)
             }
 
+            // Notebook screen
+
             Event.FIX_BUG_BUTTON_CLICKED -> {
-                //TODO
+                if (whiteBoardScreen.screenObjects.find { it == WhiteBoardScreen.RouterLightBulbItem } != null) {
+                    notebookScreen.screenObjects.add(NotebookScreen.DeployButton)
+                } else {
+                    notebookScreen.screenObjects.add(NotebookScreen.RefreshButton)
+                    notebookScreen.screenObjects.add(NotebookScreen.NoInternetItem)
+                }
+                notebookScreen.screenObjects.remove(NotebookScreen.FixBugButton)
+
             }
 
-        // Snowman screen
+            Event.REFRESH_BUTTON_CLICKED -> {
+                if (whiteBoardScreen.screenObjects.find { it == WhiteBoardScreen.RouterLightBulbItem } != null) {
+                    notebookScreen.screenObjects.remove(NotebookScreen.NoInternetItem)
+                    notebookScreen.screenObjects.remove(NotebookScreen.RefreshButton)
+                    notebookScreen.screenObjects.add(NotebookScreen.DeployButton)
+                }
+            }
+
+            Event.DEPLOY_BUTTON_CLICKED -> {
+                showText("Congratulations!")
+            }
+
+            // Snowman screen
 
             Event.KEY_FROM_SNOWMAN_TAKEN -> {
                 snowmanScreen.screenObjects.remove(SnowmanScreen.KeyItem)
@@ -143,7 +198,7 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
                 backpack.add(InventoryItem.Screwdriver)
             }
 
-        // WhiteBoardScreen
+            // WhiteBoardScreen
 
             Event.MARKERS_CLICKED -> {
                 showText("Hmmmm...")
@@ -166,19 +221,14 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
                 whiteBoardScreen.screenObjects.add(WhiteBoardScreen.RouterLightBulbItem)
                 showText("Turned wi-fi on.")
             }
-            Event.DEPLOY_BUTTON_CLICKED -> {
-                if (whiteBoardScreen.screenObjects.find { it == WhiteBoardScreen.RouterLightBulbItem } != null) {
-                    showText("Congratulations!")
-                }
-            }
 
-        // UI buttons
+            // UI buttons
 
             Event.LEFT_ARROW_CLICKED -> setCurrentScreen(ArrowDirection.LEFT)
             Event.RIGHT_ARROW_CLICKED -> setCurrentScreen(ArrowDirection.RIGHT)
             Event.DOWN_ARROW_CLICKED -> setCurrentScreen(ArrowDirection.DOWN)
 
-        // Inventory items
+            // Inventory items
 
             Event.INVENTORY_PHONE_CLICKED -> selectedItem = InventoryItem.Phone
             Event.INVENTORY_KEY_CLICKED -> selectedItem = InventoryItem.Key
@@ -190,6 +240,14 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
 
     private fun showText(text: String) {
         stageUiHandler.addScreenText(ScreenText(text))
+    }
+
+    private fun showText(screenText: ScreenText) { //TODO this screenText should remain on screen without fade out
+        stageUiHandler.addScreenText(screenText)
+    }
+
+    private fun showScreenItem(screenItem: ScreenItem) {
+        stageUiHandler.addScreenItem(screenItem)
     }
 
     class LeftArrowItem : ScreenItem(
@@ -224,4 +282,3 @@ enum class ArrowDirection {
     RIGHT,
     DOWN
 }
-
