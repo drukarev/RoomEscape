@@ -88,31 +88,31 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
             // Tablet screen
 
             Event.NUMBER_1_BUTTON_CLICKED -> {
-                showTemporaryText(tabletScreen.getPasscodeText('1'))
+                showText(tabletScreen.getPasscodeText('1'))
             }
             Event.NUMBER_2_BUTTON_CLICKED -> {
-                showTemporaryText(tabletScreen.getPasscodeText('2'))
+                showText(tabletScreen.getPasscodeText('2'))
             }
             Event.NUMBER_3_BUTTON_CLICKED -> {
-                showTemporaryText(tabletScreen.getPasscodeText('3'))
+                showText(tabletScreen.getPasscodeText('3'))
             }
             Event.NUMBER_4_BUTTON_CLICKED -> {
-                showTemporaryText(tabletScreen.getPasscodeText('4'))
+                showText(tabletScreen.getPasscodeText('4'))
             }
             Event.NUMBER_5_BUTTON_CLICKED -> {
-                showTemporaryText(tabletScreen.getPasscodeText('5'))
+                showText(tabletScreen.getPasscodeText('5'))
             }
             Event.NUMBER_6_BUTTON_CLICKED -> {
-                showTemporaryText(tabletScreen.getPasscodeText('6'))
+                showText(tabletScreen.getPasscodeText('6'))
             }
             Event.NUMBER_7_BUTTON_CLICKED -> {
-                showTemporaryText(tabletScreen.getPasscodeText('7'))
+                showText(tabletScreen.getPasscodeText('7'))
             }
             Event.NUMBER_8_BUTTON_CLICKED -> {
-                showTemporaryText(tabletScreen.getPasscodeText('8'))
+                showText(tabletScreen.getPasscodeText('8'))
             }
             Event.NUMBER_9_BUTTON_CLICKED -> {
-                showTemporaryText(tabletScreen.getPasscodeText('9'))
+                showText(tabletScreen.getPasscodeText('9'))
             }
 
             // TODO: add action for successful code verification
@@ -240,8 +240,8 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
         stageUiHandler.addTemporaryScreenText(ScreenText(text))
     }
 
-    private fun showTemporaryText(screenText: ScreenText) { //TODO this screenText should remain on screen without fade out
-        stageUiHandler.addTemporaryScreenText(screenText)
+    private fun showText(screenText: ScreenText) { //TODO this screenText should remain on screen without fade out
+        stageUiHandler.addScreenText(screenText)
     }
 
     private fun showScreenItem(screenItem: ScreenItem) {

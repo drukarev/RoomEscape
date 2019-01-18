@@ -32,6 +32,7 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
     private lateinit var shapeRenderer: ShapeRenderer
     private lateinit var camera: Camera
     private lateinit var viewport: FitViewport
+    private lateinit var font: BitmapFont
 
     private lateinit var eventHandler: EventHandler
 
@@ -45,6 +46,7 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
         camera = OrthographicCamera()
         viewport = FitViewport(1920f, 1080f, camera)
         libgdxStage = LibgdxStage(viewport)
+        font = BitmapFont()
 
         currentStage = Stage1(this)
         eventHandler = EventHandler(listOf(currentStage as EventHandler.Listener))
@@ -132,12 +134,15 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
     override fun dispose() {
         batch.dispose()
         libgdxStage.dispose()
+        removeAllScreenElements()
+        font.dispose()
     }
 
-    private val screenItems: MutableMap<ScreenItem, ImageButton> = mutableMapOf()
+    private val screenItems: MutableMap<ScreenItem, Pair<ImageButton, Texture>> = mutableMapOf()
 
     override fun addScreenItem(screenItem: ScreenItem) {
-        val textureRegion = TextureRegion(Texture(screenItem.drawable.resourceId))
+        val texture = Texture(screenItem.drawable.resourceId)
+        val textureRegion = TextureRegion(texture)
         val textureRegionDrawable = TextureRegionDrawable(textureRegion)
         val button = ImageButton(textureRegionDrawable)
         button.addListener(object : ClickListener() {
@@ -151,18 +156,18 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
         button.setPosition(screenItem.x, screenItem.y)
         button.setSize(screenItem.width, screenItem.height)
         libgdxStage.addActor(button)
-        screenItems[screenItem] = button
+        screenItems[screenItem] = Pair(button, texture)
     }
 
     override fun removeScreenItem(screenItem: ScreenItem) {
         val actor = screenItems.getValue(screenItem)
-        actor.addAction(Actions.fadeOut(0.1f))
+        actor.first.addAction(Actions.fadeOut(0.1f))
         Timer.schedule(object : Timer.Task() {
             override fun run() {
-                libgdxStage.actors.removeValue(actor, true)
+                libgdxStage.actors.removeValue(actor.first, true)
                 screenItems.remove(screenItem)
+                actor.second.dispose()
             }
-
         }, 0.1f)
     }
 
@@ -172,7 +177,7 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
         val label = Label(screenText.text, style)
         label.setPosition(screenText.x, screenText.y)
         label.setFontScale(5f, 5f)
-        label.setColor(0f,0f,0f,1f)
+        label.setColor(0f, 0f, 0f, 1f)
         label.addAction(Actions.fadeIn(0.2f))
         libgdxStage.addActor(label)
         Timer.schedule(object : Timer.Task() {
@@ -191,11 +196,11 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
 
     override fun addScreenText(screenText: ScreenText) {
         val style = Label.LabelStyle()
-        style.font = BitmapFont()
+        style.font = font
         val label = Label(screenText.text, style)
         label.setPosition(screenText.x, screenText.y)
         label.setFontScale(5f, 5f)
-        label.setColor(0f,0f,0f,1f)
+        label.setColor(0f, 0f, 0f, 1f)
         label.addAction(Actions.fadeIn(0.2f))
         libgdxStage.addActor(label)
         screenTexts[screenText] = label
