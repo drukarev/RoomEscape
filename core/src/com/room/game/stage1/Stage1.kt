@@ -46,7 +46,7 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
     }
 
     private fun prepareForCurrentScreen() {
-        stageUiHandler.removeAllScreenItems()
+        stageUiHandler.removeAllScreenElements()
         currentScreen.screenObjects.forEach {
             stageUiHandler.addScreenItem(it)
         }
@@ -75,48 +75,44 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
                 backpack.add(InventoryItem.Phone)
             }
 
-            Event.LOCKER_LOCK_CLICKED -> {
-                if (selectedItem == InventoryItem.Key) { //TODO
-                    lockerScreen.screenObjects.remove(LockerScreen.LockerDoorClosed)
-                } else {
-                    showText("Wrong password.")
-                }
+            Event.TABLET_CLICKED -> {
+                currentScreen = tabletScreen
             }
 
             Event.LOCKER_CLICKED -> {
                 if (lockerScreen.screenObjects.find { it == LockerScreen.LockerDoorClosed } != null) {
-                    showText("That's a stand with mobile phones. It is locked.")
+                    showTemporaryText("That's a stand with mobile phones. It is locked.")
                 }
             }
 
             // Tablet screen
 
             Event.NUMBER_1_BUTTON_CLICKED -> {
-                showText(tabletScreen.getPasscodeText('1'))
+                showTemporaryText(tabletScreen.getPasscodeText('1'))
             }
             Event.NUMBER_2_BUTTON_CLICKED -> {
-                showText(tabletScreen.getPasscodeText('2'))
+                showTemporaryText(tabletScreen.getPasscodeText('2'))
             }
             Event.NUMBER_3_BUTTON_CLICKED -> {
-                showText(tabletScreen.getPasscodeText('3'))
+                showTemporaryText(tabletScreen.getPasscodeText('3'))
             }
             Event.NUMBER_4_BUTTON_CLICKED -> {
-                showText(tabletScreen.getPasscodeText('4'))
+                showTemporaryText(tabletScreen.getPasscodeText('4'))
             }
             Event.NUMBER_5_BUTTON_CLICKED -> {
-                showText(tabletScreen.getPasscodeText('5'))
+                showTemporaryText(tabletScreen.getPasscodeText('5'))
             }
             Event.NUMBER_6_BUTTON_CLICKED -> {
-                showText(tabletScreen.getPasscodeText('6'))
+                showTemporaryText(tabletScreen.getPasscodeText('6'))
             }
             Event.NUMBER_7_BUTTON_CLICKED -> {
-                showText(tabletScreen.getPasscodeText('7'))
+                showTemporaryText(tabletScreen.getPasscodeText('7'))
             }
             Event.NUMBER_8_BUTTON_CLICKED -> {
-                showText(tabletScreen.getPasscodeText('8'))
+                showTemporaryText(tabletScreen.getPasscodeText('8'))
             }
             Event.NUMBER_9_BUTTON_CLICKED -> {
-                showText(tabletScreen.getPasscodeText('9'))
+                showTemporaryText(tabletScreen.getPasscodeText('9'))
             }
 
             // TODO: add action for successful code verification
@@ -129,7 +125,7 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
                     workplaceScreen.screenObjects.add(WorkplaceScreen.DeskLockerShelfItem)
                     workplaceScreen.screenObjects.add(WorkplaceScreen.ChargerItem)
                 } else {
-                    showText("This locker is closed.")
+                    showTemporaryText("This locker is closed.")
                 }
             }
 
@@ -139,7 +135,7 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
                     workplaceScreen.screenObjects.remove(WorkplaceScreen.PhoneHolderItem)
                     workplaceScreen.screenObjects.add(WorkplaceScreen.PhoneHolderWithMobileItem)
                 } else {
-                    showText("Looks like a phone holder.")
+                    showTemporaryText("Looks like a phone holder.")
                 }
             }
 
@@ -152,7 +148,9 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
 
             Event.NOTEBOOK_CLICKED -> {
                 if (workplaceScreen.screenObjects.find { it == WorkplaceScreen.ConnectedChargerItem } != null) {
-                    //TODO: open notebook
+                    currentScreen = notebookScreen
+                } else {
+                    showTemporaryText("This notebook is out of charge")
                 }
             }
 
@@ -183,7 +181,7 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
             }
 
             Event.DEPLOY_BUTTON_CLICKED -> {
-                showText("Congratulations!")
+                showTemporaryText("Congratulations!")
             }
 
             // Snowman screen
@@ -201,7 +199,7 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
             // WhiteBoardScreen
 
             Event.MARKERS_CLICKED -> {
-                showText("Hmmmm...")
+                showTemporaryText("Hmmmm...")
             }
 
             Event.LEFT_SCREW_UNSCREWED -> {
@@ -219,7 +217,7 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
 
             Event.ROUTER_CLICKED -> {
                 whiteBoardScreen.screenObjects.add(WhiteBoardScreen.RouterLightBulbItem)
-                showText("Turned wi-fi on.")
+                showTemporaryText("Turned wi-fi on.")
             }
 
             // UI buttons
@@ -238,12 +236,12 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
         selectedItem = null
     }
 
-    private fun showText(text: String) {
-        stageUiHandler.addScreenText(ScreenText(text))
+    private fun showTemporaryText(text: String) {
+        stageUiHandler.addTemporaryScreenText(ScreenText(text))
     }
 
-    private fun showText(screenText: ScreenText) { //TODO this screenText should remain on screen without fade out
-        stageUiHandler.addScreenText(screenText)
+    private fun showTemporaryText(screenText: ScreenText) { //TODO this screenText should remain on screen without fade out
+        stageUiHandler.addTemporaryScreenText(screenText)
     }
 
     private fun showScreenItem(screenItem: ScreenItem) {

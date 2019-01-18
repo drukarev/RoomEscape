@@ -154,7 +154,19 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
         screenItems[screenItem] = button
     }
 
-    override fun addScreenText(screenText: ScreenText) {
+    override fun removeScreenItem(screenItem: ScreenItem) {
+        val actor = screenItems.getValue(screenItem)
+        actor.addAction(Actions.fadeOut(0.1f))
+        Timer.schedule(object : Timer.Task() {
+            override fun run() {
+                libgdxStage.actors.removeValue(actor, true)
+                screenItems.remove(screenItem)
+            }
+
+        }, 0.1f)
+    }
+
+    override fun addTemporaryScreenText(screenText: ScreenText) {
         val style = Label.LabelStyle()
         style.font = BitmapFont()
         val label = Label(screenText.text, style)
@@ -175,21 +187,36 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
         }, 2.3f)
     }
 
-    override fun removeScreenItem(screenItem: ScreenItem) {
-        val actor = screenItems.getValue(screenItem)
+    private val screenTexts: MutableMap<ScreenText, Label> = mutableMapOf()
+
+    override fun addScreenText(screenText: ScreenText) {
+        val style = Label.LabelStyle()
+        style.font = BitmapFont()
+        val label = Label(screenText.text, style)
+        label.setPosition(screenText.x, screenText.y)
+        label.setFontScale(5f, 5f)
+        label.setColor(0f,0f,0f,1f)
+        label.addAction(Actions.fadeIn(0.2f))
+        libgdxStage.addActor(label)
+        screenTexts[screenText] = label
+    }
+
+    override fun removeScreenText(screenText: ScreenText) {
+        val actor = screenTexts.getValue(screenText)
         actor.addAction(Actions.fadeOut(0.1f))
         Timer.schedule(object : Timer.Task() {
             override fun run() {
                 libgdxStage.actors.removeValue(actor, true)
-                screenItems.remove(screenItem)
+                screenTexts.remove(screenText)
             }
 
         }, 0.1f)
     }
 
-    override fun removeAllScreenItems() {
+    override fun removeAllScreenElements() {
         libgdxStage.actors.removeAll { true }
         screenItems.clear()
+        screenTexts.clear()
     }
 
     private inner class GestureListener : GestureDetector.GestureListener {

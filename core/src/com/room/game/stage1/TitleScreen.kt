@@ -13,7 +13,7 @@ class TitleScreen(
         screenObjects: MutableList<ScreenItem> = mutableListOf(StartGameItem, MusicItem, SoundItem)
 ) : Screen(leftScreen, rightScreen, downScreen, screenObjects, uiHandler) {
 
-    override val background: Drawable = Drawable("background3.jpg")
+    override val background: Drawable = Drawable("background_title_screen.jpg")
 
     object StartGameItem : ScreenItem(
             drawable = Drawable("icon_phone.jpg"), //TODO: replace
