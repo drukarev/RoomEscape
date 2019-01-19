@@ -77,6 +77,7 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
 
             Event.TABLET_CLICKED -> {
                 currentScreen = tabletScreen
+                prepareForCurrentScreen()
             }
 
             Event.LOCKER_CLICKED -> {

@@ -1,7 +1,5 @@
 package com.room.game.core
 
-import javafx.collections.ListChangeListener
-
 abstract class Screen(
         var leftScreen: Screen?,
         var rightScreen: Screen?,
@@ -10,18 +8,16 @@ abstract class Screen(
         uiHandler: StageUiHandler
 ) {
     abstract val background: Drawable
-    val screenObjects: ArrayObservableList<ScreenItem> = ArrayObservableList<ScreenItem>().apply {
+    val screenObjects: ObservableArrayList<ScreenItem> = ObservableArrayList<ScreenItem>().apply {
         addAll(screenObjectsList)
-        addListener(ListChangeListener {
-            it.next()
-            if (it.wasRemoved()) {
-                it.removed.forEach {
-                    uiHandler.removeScreenItem(it)
-                }
-            } else if (it.wasAdded()) {
-                it.addedSubList.forEach {
-                    uiHandler.addScreenItem(it)
-                }
+        addListener(object : ObservableArrayList.Listener<ScreenItem> {
+
+            override fun onElementAdded(element: ScreenItem) {
+                uiHandler.addScreenItem(element)
+            }
+
+            override fun onElementRemoved(element: ScreenItem) {
+                uiHandler.removeScreenItem(element)
             }
         })
     }
