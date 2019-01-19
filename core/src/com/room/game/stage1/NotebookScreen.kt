@@ -16,7 +16,7 @@ class NotebookScreen(
     override val background: Drawable = Drawable("background3.jpg")
 
     object FixBugButton : ScreenItem(
-            drawable = Drawable("icon_phone.jpg"), //TODO: replace
+            drawable = Drawable("phone.png"), //TODO: replace
             x = 1000f,
             y = 200f,
             width = 500f,
@@ -25,29 +25,11 @@ class NotebookScreen(
     )
 
     object DeployButton : ScreenItem(
-            drawable = Drawable("icon_phone.jpg"), //TODO: replace
+            drawable = Drawable("phone.png"), //TODO: replace
             x = 1000f,
             y = 200f,
             width = 500f,
             height = 500f,
             event = Event.DEPLOY_BUTTON_CLICKED
-    )
-
-    object NoInternetItem : ScreenItem(
-            drawable = Drawable("icon_phone.jpg"), //TODO: replace
-            x = 1000f,
-            y = 200f,
-            width = 500f,
-            height = 500f,
-            event = null
-    )
-
-    object RefreshButton : ScreenItem(
-            drawable = Drawable("icon_phone.jpg"), //TODO: replace
-            x = 1000f,
-            y = 200f,
-            width = 500f,
-            height = 500f,
-            event = Event.REFRESH_BUTTON_CLICKED
     )
 }

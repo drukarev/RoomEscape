@@ -16,7 +16,7 @@ class LockerScreen(
     override val background: Drawable = Drawable("background2.jpg")
 
     object PhoneItem : ScreenItem(
-            drawable = Drawable("icon_phone.jpg"),
+            drawable = Drawable("phone.png"),
             x = 1000f,
             y = 200f,
             width = 500f,
@@ -25,7 +25,7 @@ class LockerScreen(
     )
 
     object TabletItem : ScreenItem(
-            drawable = Drawable("icon_phone.jpg"), //TODO: replace
+            drawable = Drawable("phone.png"), //TODO: replace
             x = 1000f,
             y = 200f,
             width = 160f,
@@ -34,7 +34,7 @@ class LockerScreen(
     )
 
     object LockerDoorClosed : ScreenItem(
-            drawable = Drawable("icon_phone.jpg"), //TODO: replace
+            drawable = Drawable("phone.png"), //TODO: replace
             x = 1000f,
             y = 200f,
             width = 1000f,
@@ -43,7 +43,7 @@ class LockerScreen(
     )
 
     object LockerDoorHalfOpened : ScreenItem(
-            drawable = Drawable("icon_phone.jpg"), //TODO: replace
+            drawable = Drawable("phone.png"), //TODO: replace
             x = 1000f,
             y = 200f,
             width = 0f,

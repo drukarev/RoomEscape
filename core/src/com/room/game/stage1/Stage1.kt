@@ -26,9 +26,13 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
     }
 
     override val screens = listOf(whiteBoardScreen, lockerScreen, snowmanScreen, workplaceScreen)
-    override val backpack: MutableList<InventoryItem> = mutableListOf()
+    override val inventory: MutableList<InventoryItem> = mutableListOf(InventoryItem.Screwdriver)
 
     override var currentScreen: Screen = titleScreen
+        set(value) {
+            field = value
+            prepareForCurrentScreen()
+        }
 
     private var selectedItem: InventoryItem? = null
 
@@ -42,7 +46,6 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
             ArrowDirection.RIGHT -> currentScreen.rightScreen ?: currentScreen
             ArrowDirection.DOWN -> currentScreen.downScreen ?: currentScreen
         }
-        prepareForCurrentScreen()
     }
 
     private fun prepareForCurrentScreen() {
@@ -61,10 +64,8 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
             Event.START_GAME -> {
                 currentScreen = screens.first()
             }
+
             Event.ICON_MUSIC_CLICKED -> {
-                //TODO
-            }
-            Event.ICON_SOUND_CLICKED -> {
                 //TODO
             }
 
@@ -72,12 +73,11 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
 
             Event.PHONE_FROM_LOCKER_TAKEN -> {
                 lockerScreen.screenObjects.remove(LockerScreen.PhoneItem)
-                backpack.add(InventoryItem.Phone)
+                inventory.add(InventoryItem.Phone)
             }
 
             Event.TABLET_CLICKED -> {
                 currentScreen = tabletScreen
-                prepareForCurrentScreen()
             }
 
             Event.LOCKER_CLICKED -> {
@@ -122,7 +122,7 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
 
             Event.DESK_LOCKER_ITEM_CLICKED -> {
                 if (selectedItem == InventoryItem.Key) {
-                    backpack.remove(InventoryItem.Key)
+                    inventory.remove(InventoryItem.Key)
                     workplaceScreen.screenObjects.add(WorkplaceScreen.DeskLockerShelfItem)
                     workplaceScreen.screenObjects.add(WorkplaceScreen.ChargerItem)
                 } else {
@@ -132,7 +132,7 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
 
             Event.PHONE_HOLDER_CLICKED -> {
                 if (selectedItem == InventoryItem.Phone) {
-                    backpack.remove(InventoryItem.Phone)
+                    inventory.remove(InventoryItem.Phone)
                     workplaceScreen.screenObjects.remove(WorkplaceScreen.PhoneHolderItem)
                     workplaceScreen.screenObjects.add(WorkplaceScreen.PhoneHolderWithMobileItem)
                 } else {
@@ -142,7 +142,7 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
 
             Event.POWER_SOCKET_ITEM_CLICKED -> {
                 if (selectedItem == InventoryItem.Charger) {
-                    backpack.remove(InventoryItem.Charger)
+                    inventory.remove(InventoryItem.Charger)
                     workplaceScreen.screenObjects.add(WorkplaceScreen.ConnectedChargerItem)
                 }
             }
@@ -157,28 +157,15 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
 
             Event.CHARGER_TAKEN -> {
                 workplaceScreen.screenObjects.remove(WorkplaceScreen.ChargerItem)
-                backpack.add(InventoryItem.Charger)
+                inventory.add(InventoryItem.Charger)
             }
 
             // Notebook screen
 
             Event.FIX_BUG_BUTTON_CLICKED -> {
-                if (whiteBoardScreen.screenObjects.find { it == WhiteBoardScreen.RouterLightBulbItem } != null) {
-                    notebookScreen.screenObjects.add(NotebookScreen.DeployButton)
-                } else {
-                    notebookScreen.screenObjects.add(NotebookScreen.RefreshButton)
-                    notebookScreen.screenObjects.add(NotebookScreen.NoInternetItem)
-                }
+                notebookScreen.screenObjects.add(NotebookScreen.DeployButton)
                 notebookScreen.screenObjects.remove(NotebookScreen.FixBugButton)
 
-            }
-
-            Event.REFRESH_BUTTON_CLICKED -> {
-                if (whiteBoardScreen.screenObjects.find { it == WhiteBoardScreen.RouterLightBulbItem } != null) {
-                    notebookScreen.screenObjects.remove(NotebookScreen.NoInternetItem)
-                    notebookScreen.screenObjects.remove(NotebookScreen.RefreshButton)
-                    notebookScreen.screenObjects.add(NotebookScreen.DeployButton)
-                }
             }
 
             Event.DEPLOY_BUTTON_CLICKED -> {
@@ -189,36 +176,63 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
 
             Event.KEY_FROM_SNOWMAN_TAKEN -> {
                 snowmanScreen.screenObjects.remove(SnowmanScreen.KeyItem)
-                backpack.add(InventoryItem.Key)
+                inventory.add(InventoryItem.Key)
             }
 
             Event.SCREWDRIVER_TAKEN -> {
                 snowmanScreen.screenObjects.remove(SnowmanScreen.ScrewdriverItem)
-                backpack.add(InventoryItem.Screwdriver)
+                inventory.add(InventoryItem.Screwdriver)
             }
 
             // WhiteBoardScreen
 
-            Event.MARKERS_CLICKED -> {
-                showTemporaryText("Hmmmm...")
-            }
-
-            Event.LEFT_SCREW_UNSCREWED -> {
-                whiteBoardScreen.screenObjects.remove(WhiteBoardScreen.LeftScrewItem)
-                if (whiteBoardScreen.screenObjects.find { it == WhiteBoardScreen.RightScrewItem } == null) {
-                    whiteBoardScreen.screenObjects.remove(WhiteBoardScreen.TvItem) //TODO: add broken TV
+            Event.LEFT_SCREW_CLICKED -> {
+                if (inventory.find { it == InventoryItem.Screwdriver } != null) {
+                    whiteBoardScreen.screenObjects.remove(WhiteBoardScreen.LeftScrewItem)
+                    if (whiteBoardScreen.screenObjects.find { it == WhiteBoardScreen.RightScrewItem } == null) {
+                        whiteBoardScreen.screenObjects.remove(WhiteBoardScreen.TvLeftScrewItem)
+                        whiteBoardScreen.screenObjects.add(WhiteBoardScreen.TvBrokenItem)
+                    } else {
+                        whiteBoardScreen.screenObjects.add(WhiteBoardScreen.TvRightScrewItem)
+                        whiteBoardScreen.screenObjects.remove(WhiteBoardScreen.TvItem)
+                    }
                 }
             }
-            Event.RIGHT_SCREW_UNSCREWED -> {
-                whiteBoardScreen.screenObjects.remove(WhiteBoardScreen.RightScrewItem)
-                if (whiteBoardScreen.screenObjects.find { it == WhiteBoardScreen.LeftScrewItem } == null) {
-                    whiteBoardScreen.screenObjects.remove(WhiteBoardScreen.TvItem) //TODO: add broken TV
+            Event.RIGHT_SCREW_CLICKED -> {
+                if (inventory.find { it == InventoryItem.Screwdriver } != null) {
+                    whiteBoardScreen.screenObjects.remove(WhiteBoardScreen.RightScrewItem)
+                    if (whiteBoardScreen.screenObjects.find { it == WhiteBoardScreen.LeftScrewItem } == null) {
+                        whiteBoardScreen.screenObjects.remove(WhiteBoardScreen.TvRightScrewItem)
+                        whiteBoardScreen.screenObjects.add(WhiteBoardScreen.TvBrokenItem)
+                    } else {
+                        whiteBoardScreen.screenObjects.add(WhiteBoardScreen.TvLeftScrewItem)
+                        whiteBoardScreen.screenObjects.remove(WhiteBoardScreen.TvItem)
+                    }
                 }
             }
 
-            Event.ROUTER_CLICKED -> {
-                whiteBoardScreen.screenObjects.add(WhiteBoardScreen.RouterLightBulbItem)
-                showTemporaryText("Turned wi-fi on.")
+            Event.TV_CLICKED -> {
+                showTemporaryText("I don't want to look at this")
+            }
+
+            Event.MESSAGE_134_CLICKED -> {
+                showTemporaryText("Definitely")
+            }
+
+            Event.WHITEBOARD_IMAGE_CLICKED -> {
+                showTemporaryText("What is this?")
+            }
+
+            Event.WHITEBOARD_NOTE_CLICKED -> {
+                showTemporaryText("""It says "One bug remaining till new release"""")
+            }
+
+            Event.BROKEN_TV_CLICKED -> {
+                showTemporaryText("At least it works on mocks")
+            }
+
+            Event.TV_ON_ONE_SCREW_CLICKED -> {
+                showTemporaryText("Looking better already")
             }
 
             // UI buttons

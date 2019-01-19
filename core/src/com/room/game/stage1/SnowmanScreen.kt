@@ -16,7 +16,7 @@ class SnowmanScreen(
     override val background: Drawable = Drawable("background3.jpg")
 
     object KeyItem : ScreenItem(
-            drawable = Drawable("icon_phone.jpg"), //TODO: replace
+            drawable = Drawable("phone.png"), //TODO: replace
             x = 1000f,
             y = 200f,
             width = 160f,
@@ -25,7 +25,7 @@ class SnowmanScreen(
     )
 
     object ScrewdriverItem : ScreenItem(
-            drawable = Drawable("icon_phone.jpg"), //TODO: replace
+            drawable = Drawable("phone.png"), //TODO: replace
             x = 1000f,
             y = 200f,
             width = 160f,

@@ -13,7 +13,7 @@ class TabletScreen(
     override val background: Drawable = Drawable("background3.jpg")
 
     object Number1Button : ScreenItem(
-            drawable = Drawable("icon_phone.jpg"), //TODO: replace
+            drawable = Drawable("phone.png"), //TODO: replace
             x = 1000f,
             y = 200f,
             width = 160f,
@@ -22,7 +22,7 @@ class TabletScreen(
     )
 
     object Number2Button : ScreenItem(
-            drawable = Drawable("icon_phone.jpg"), //TODO: replace
+            drawable = Drawable("phone.png"), //TODO: replace
             x = 1000f,
             y = 200f,
             width = 160f,
@@ -31,7 +31,7 @@ class TabletScreen(
     )
 
     object Number3Button : ScreenItem(
-            drawable = Drawable("icon_phone.jpg"), //TODO: replace
+            drawable = Drawable("phone.png"), //TODO: replace
             x = 1000f,
             y = 200f,
             width = 160f,
@@ -40,7 +40,7 @@ class TabletScreen(
     )
 
     object Number4Button : ScreenItem(
-            drawable = Drawable("icon_phone.jpg"), //TODO: replace
+            drawable = Drawable("phone.png"), //TODO: replace
             x = 1000f,
             y = 200f,
             width = 160f,
@@ -49,7 +49,7 @@ class TabletScreen(
     )
 
     object Number5Button : ScreenItem(
-            drawable = Drawable("icon_phone.jpg"), //TODO: replace
+            drawable = Drawable("phone.png"), //TODO: replace
             x = 1000f,
             y = 200f,
             width = 160f,
@@ -58,7 +58,7 @@ class TabletScreen(
     )
 
     object Number6Button : ScreenItem(
-            drawable = Drawable("icon_phone.jpg"), //TODO: replace
+            drawable = Drawable("phone.png"), //TODO: replace
             x = 1000f,
             y = 200f,
             width = 160f,
@@ -67,7 +67,7 @@ class TabletScreen(
     )
 
     object Number7Button : ScreenItem(
-            drawable = Drawable("icon_phone.jpg"), //TODO: replace
+            drawable = Drawable("phone.png"), //TODO: replace
             x = 1000f,
             y = 200f,
             width = 160f,
@@ -76,7 +76,7 @@ class TabletScreen(
     )
 
     object Number8Button : ScreenItem(
-            drawable = Drawable("icon_phone.jpg"), //TODO: replace
+            drawable = Drawable("phone.png"), //TODO: replace
             x = 1000f,
             y = 200f,
             width = 160f,
@@ -85,7 +85,7 @@ class TabletScreen(
     )
 
     object Number9Button : ScreenItem(
-            drawable = Drawable("icon_phone.jpg"), //TODO: replace
+            drawable = Drawable("phone.png"), //TODO: replace
             x = 1000f,
             y = 200f,
             width = 160f,

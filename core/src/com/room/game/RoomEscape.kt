@@ -57,7 +57,7 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
 
         val frames = Array(4) {
             TextureRegion(Texture(when (it) {
-                0 -> "background1.jpg"
+                0 -> "background2.jpg"
                 1 -> "background2.jpg"
                 2 -> "background3.jpg"
                 else -> "background4.jpg"
@@ -116,7 +116,7 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
         }
 
         var margin = 0f
-        currentStage.backpack.map {
+        currentStage.inventory.map {
             margin += 200f
             ScreenItem(it.drawable, viewport.worldWidth - 200f, viewport.worldHeight - margin, 160f, 160f, it.event)
         }.forEach {

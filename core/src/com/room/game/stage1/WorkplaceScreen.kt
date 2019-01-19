@@ -16,7 +16,7 @@ class WorkplaceScreen(
     override val background: Drawable = Drawable("background4.jpg")
 
     object PowerSocketItem : ScreenItem(
-            drawable = Drawable("icon_phone.jpg"), //TODO: replace
+            drawable = Drawable("phone.png"), //TODO: replace
             x = 1000f,
             y = 200f,
             width = 160f,
@@ -25,7 +25,7 @@ class WorkplaceScreen(
     )
 
     object PhoneHolderItem : ScreenItem(
-            drawable = Drawable("icon_phone.jpg"), //TODO: replace
+            drawable = Drawable("phone.png"), //TODO: replace
             x = 1000f,
             y = 200f,
             width = 160f,
@@ -34,7 +34,7 @@ class WorkplaceScreen(
     )
 
     object PhoneHolderWithMobileItem : ScreenItem(
-            drawable = Drawable("icon_phone.jpg"), //TODO: replace
+            drawable = Drawable("phone.png"), //TODO: replace
             x = 1000f,
             y = 200f,
             width = 160f,
@@ -43,7 +43,7 @@ class WorkplaceScreen(
     )
 
     object NotebookItem : ScreenItem(
-            drawable = Drawable("icon_phone.jpg"), //TODO: replace
+            drawable = Drawable("phone.png"), //TODO: replace
             x = 1000f,
             y = 200f,
             width = 160f,
@@ -52,7 +52,7 @@ class WorkplaceScreen(
     )
 
     object ConnectedChargerItem : ScreenItem(
-            drawable = Drawable("icon_phone.jpg"), //TODO: replace
+            drawable = Drawable("phone.png"), //TODO: replace
             x = 1000f,
             y = 200f,
             width = 160f,
@@ -61,7 +61,7 @@ class WorkplaceScreen(
     )
 
     object DeskLockerItem : ScreenItem(
-            drawable = Drawable("icon_phone.jpg"), //TODO: replace
+            drawable = Drawable("phone.png"), //TODO: replace
             x = 1000f,
             y = 200f,
             width = 160f,
@@ -70,7 +70,7 @@ class WorkplaceScreen(
     )
 
     object DeskLockerShelfItem : ScreenItem(
-            drawable = Drawable("icon_phone.jpg"), //TODO: replace
+            drawable = Drawable("phone.png"), //TODO: replace
             x = 1000f,
             y = 200f,
             width = 160f,
@@ -79,7 +79,7 @@ class WorkplaceScreen(
     )
 
     object ChargerItem : ScreenItem(
-            drawable = Drawable("icon_phone.jpg"), //TODO: replace
+            drawable = Drawable("phone.png"), //TODO: replace
             x = 1000f,
             y = 200f,
             width = 160f,
