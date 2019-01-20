@@ -32,6 +32,7 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
     private lateinit var camera: Camera
     private lateinit var viewport: FitViewport
     private lateinit var font: BitmapFont
+    private lateinit var music: Music
 
     private lateinit var eventHandler: EventHandler
 
@@ -74,7 +75,7 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
             load(musicName, Music::class.java)
             finishLoading()
             update()
-            val music: Music = get(musicName)
+            music = get(musicName)
             music.play()
             music.isLooping = true
         }
@@ -135,6 +136,8 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
         libgdxStage.dispose()
         removeAllScreenElements()
         font.dispose()
+        music.dispose()
+        shapeRenderer.dispose()
     }
 
     private val screenItems: MutableMap<ScreenItem, Pair<ImageButton, Texture>> = mutableMapOf()
@@ -221,6 +224,14 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
         libgdxStage.actors.removeAll { true }
         screenItems.clear()
         screenTexts.clear()
+    }
+
+    override fun startMusic() {
+        music.play()
+    }
+
+    override fun stopMusic() {
+        music.pause()
     }
 
     private inner class GestureListener : GestureDetector.GestureListener {

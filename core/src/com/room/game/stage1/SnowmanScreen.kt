@@ -10,26 +10,35 @@ class SnowmanScreen(
         rightScreen: Screen?,
         downScreen: Screen?,
         uiHandler: StageUiHandler,
-        screenObjects: MutableList<ScreenItem> = mutableListOf(KeyItem)
+        screenObjects: MutableList<ScreenItem> = mutableListOf(BlohajItem, SnowmanItem, KeyItem)
 ) : Screen(leftScreen, rightScreen, downScreen, screenObjects, uiHandler) {
 
-    override val background: Drawable = Drawable("background3.jpg")
+    override val background: Drawable = Drawable("snowman_screen_background.jpg")
 
     object KeyItem : ScreenItem(
-            drawable = Drawable("phone.png"), //TODO: replace
-            x = 1000f,
-            y = 200f,
-            width = 160f,
-            height = 160f,
-            event = Event.KEY_FROM_SNOWMAN_TAKEN
+            drawable = Drawable("snowman_screen_key.png"),
+            x = 800f,
+            y = 430f,
+            width = 72f,
+            height = 86f,
+            event = Event.KEY_FROM_SNOWMAN_CLICKED
     )
 
-    object ScrewdriverItem : ScreenItem(
-            drawable = Drawable("phone.png"), //TODO: replace
-            x = 1000f,
-            y = 200f,
-            width = 160f,
-            height = 160f,
-            event = Event.SCREWDRIVER_TAKEN
+    object BlohajItem : ScreenItem(
+            drawable = Drawable("snowman_screen_blohaj.png"),
+            x = 110f,
+            y = 100f,
+            width = 612f,
+            height = 636f,
+            event = Event.BLOHAJ_CLICKED
+    )
+
+    object SnowmanItem : ScreenItem(
+            drawable = Drawable("snowman_screen_snowman.png"),
+            x = 800f,
+            y = 40f,
+            width = 1050f,
+            height = 828f,
+            event = Event.SNOWMAN_CLICKED
     )
 }

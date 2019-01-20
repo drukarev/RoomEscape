@@ -13,23 +13,23 @@ class TitleScreen(
         screenObjects: MutableList<ScreenItem> = mutableListOf(StartGameItem, MusicItem)
 ) : Screen(leftScreen, rightScreen, downScreen, screenObjects, uiHandler) {
 
-    override val background: Drawable = Drawable("background_title_screen.jpg")
+    override val background: Drawable = Drawable("title_screen_background.jpg")
 
     object StartGameItem : ScreenItem(
-            drawable = Drawable("phone.png"), //TODO: replace
-            x = 1000f,
-            y = 200f,
-            width = 160f,
-            height = 160f,
+            drawable = Drawable("title_screen_start.jpg"),
+            x = 1300f,
+            y = 50f,
+            width = 439f,
+            height = 148f,
             event = Event.START_GAME
     )
 
     object MusicItem : ScreenItem(
-            drawable = Drawable("phone.png"), //TODO: replace
-            x = 100f,
-            y = 200f,
-            width = 160f,
-            height = 160f,
+            drawable = Drawable("title_screen_sound.jpg"),
+            x = 200f,
+            y = 50f,
+            width = 162f,
+            height = 144f,
             event = Event.ICON_MUSIC_CLICKED
     )
 }

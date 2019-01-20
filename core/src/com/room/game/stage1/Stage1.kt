@@ -26,7 +26,7 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
     }
 
     override val screens = listOf(whiteBoardScreen, lockerScreen, snowmanScreen, workplaceScreen)
-    override val inventory: MutableList<InventoryItem> = mutableListOf(InventoryItem.Screwdriver)
+    override val inventory: MutableList<InventoryItem> = mutableListOf()
 
     override var currentScreen: Screen = titleScreen
         set(value) {
@@ -35,6 +35,16 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
         }
 
     private var selectedItem: InventoryItem? = null
+
+    private var musicOn = true
+        set(value) {
+            if (value) {
+                stageUiHandler.startMusic()
+            } else {
+                stageUiHandler.stopMusic()
+            }
+            field = value
+        }
 
     init {
         prepareForCurrentScreen()
@@ -66,7 +76,7 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
             }
 
             Event.ICON_MUSIC_CLICKED -> {
-                //TODO
+                musicOn = !musicOn
             }
 
             // Locker screen
@@ -174,14 +184,23 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
 
             // Snowman screen
 
-            Event.KEY_FROM_SNOWMAN_TAKEN -> {
+            Event.KEY_FROM_SNOWMAN_CLICKED -> {
                 snowmanScreen.screenObjects.remove(SnowmanScreen.KeyItem)
                 inventory.add(InventoryItem.Key)
             }
 
-            Event.SCREWDRIVER_TAKEN -> {
-                snowmanScreen.screenObjects.remove(SnowmanScreen.ScrewdriverItem)
-                inventory.add(InventoryItem.Screwdriver)
+            Event.BLOHAJ_CLICKED -> {
+                val alreadyHasScrewdriver = inventory.find { it == InventoryItem.Screwdriver } != null
+                if (alreadyHasScrewdriver) {
+                    showTemporaryText("Still a very fluffy shark")
+                } else {
+                    showTemporaryText("A very fluffy shark. It has a screwdriver in its jaws")
+                    inventory.add(InventoryItem.Screwdriver)
+                }
+            }
+
+            Event.SNOWMAN_CLICKED -> {
+                showTemporaryText("That is obviously a snowman")
             }
 
             // WhiteBoardScreen
@@ -220,7 +239,7 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
             }
 
             Event.WHITEBOARD_IMAGE_CLICKED -> {
-                showTemporaryText("What is this?")
+                showTemporaryText("What?")
             }
 
             Event.WHITEBOARD_NOTE_CLICKED -> {
