@@ -13,41 +13,32 @@ class LockerScreen(
         screenObjects: MutableList<ScreenItem> = mutableListOf(PhoneItem, LockerDoorClosed, TabletItem)
 ) : Screen(leftScreen, rightScreen, downScreen, screenObjects, uiHandler) {
 
-    override val background: Drawable = Drawable("background2.jpg")
+    override val background: Drawable = Drawable("locker_screen_background.jpg")
 
     object PhoneItem : ScreenItem(
-            drawable = Drawable("phone.png"),
+            drawable = Drawable("locker_screen_phone.png"),
             x = 1000f,
             y = 200f,
-            width = 500f,
-            height = 500f,
-            event = Event.PHONE_FROM_LOCKER_TAKEN
+            width = 134f,
+            height = 123f,
+            event = Event.PHONE_IN_LOCKER_CLICKED
     )
 
     object TabletItem : ScreenItem(
-            drawable = Drawable("phone.png"), //TODO: replace
-            x = 1000f,
+            drawable = Drawable("locker_screen_lock.png"),
+            x = 835f,
             y = 200f,
-            width = 160f,
-            height = 160f,
+            width = 202f,
+            height = 278f,
             event = Event.TABLET_CLICKED
     )
 
     object LockerDoorClosed : ScreenItem(
-            drawable = Drawable("phone.png"), //TODO: replace
-            x = 1000f,
-            y = 200f,
-            width = 1000f,
-            height = 1000f,
-            event = Event.LOCKER_CLICKED
-    )
-
-    object LockerDoorHalfOpened : ScreenItem(
-            drawable = Drawable("phone.png"), //TODO: replace
-            x = 1000f,
-            y = 200f,
-            width = 0f,
-            height = 0f,
-            event = null
+            drawable = Drawable("locker_screen_door.png"),
+            x = 360f,
+            y = 0f,
+            width = 1104f,
+            height = 960f,
+            event = Event.LOCKER_DOOR_CLICKED
     )
 }

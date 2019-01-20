@@ -10,80 +10,90 @@ class WorkplaceScreen(
         rightScreen: Screen?,
         downScreen: Screen?,
         uiHandler: StageUiHandler,
-        screenObjects: MutableList<ScreenItem> = mutableListOf(PowerSocketItem, PhoneHolderItem, NotebookItem)
+        screenObjects: MutableList<ScreenItem> =
+                mutableListOf(PowerSocketItem, PhoneHolderItem, NotebookItem, DeskLockerItem)
 ) : Screen(leftScreen, rightScreen, downScreen, screenObjects, uiHandler) {
 
-    override val background: Drawable = Drawable("background4.jpg")
+    override val background: Drawable = Drawable("workplace_screen_background.jpg")
 
     object PowerSocketItem : ScreenItem(
-            drawable = Drawable("phone.png"), //TODO: replace
-            x = 1000f,
-            y = 200f,
-            width = 160f,
-            height = 160f,
+            drawable = Drawable("workplace_screen_power_socket.png"),
+            x = 50f,
+            y = 550f,
+            width = 82f,
+            height = 92f,
             event = Event.POWER_SOCKET_ITEM_CLICKED
     )
 
     object PhoneHolderItem : ScreenItem(
-            drawable = Drawable("phone.png"), //TODO: replace
+            drawable = Drawable("workplace_screen_phone_holder.png"),
             x = 1000f,
-            y = 200f,
-            width = 160f,
-            height = 160f,
+            y = 400f,
+            width = 156f,
+            height = 183f,
             event = Event.PHONE_HOLDER_CLICKED
     )
 
     object PhoneHolderWithMobileItem : ScreenItem(
-            drawable = Drawable("phone.png"), //TODO: replace
-            x = 1000f,
-            y = 200f,
-            width = 160f,
-            height = 160f,
-            event = null
+            drawable = Drawable("workplace_screen_connected_phone.png"),
+            x = 820f,
+            y = 380f,
+            width = 313f,
+            height = 241f,
+            event = Event.CONNECTED_PHONE_CLICKED
     )
 
     object NotebookItem : ScreenItem(
-            drawable = Drawable("phone.png"), //TODO: replace
-            x = 1000f,
-            y = 200f,
-            width = 160f,
-            height = 160f,
+            drawable = Drawable("workplace_screen_notebook.png"),
+            x = 330f,
+            y = 370f,
+            width = 582f,
+            height = 459f,
+            event = Event.NOTEBOOK_CLICKED
+    )
+
+    object NotebookOnItem : ScreenItem(
+            drawable = Drawable("workplace_screen_notebook_on.png"),
+            x = 330f,
+            y = 450f,
+            width = 582f,
+            height = 459f,
             event = Event.NOTEBOOK_CLICKED
     )
 
     object ConnectedChargerItem : ScreenItem(
-            drawable = Drawable("phone.png"), //TODO: replace
-            x = 1000f,
-            y = 200f,
-            width = 160f,
-            height = 160f,
+            drawable = Drawable("workplace_screen_connected_charger.png"),
+            x = 30f,
+            y = 450f,
+            width = 429f,
+            height = 230f,
             event = null
     )
 
     object DeskLockerItem : ScreenItem(
-            drawable = Drawable("phone.png"), //TODO: replace
-            x = 1000f,
-            y = 200f,
-            width = 160f,
-            height = 160f,
+            drawable = Drawable("workplace_screen_locker.png"),
+            x = 1190f,
+            y = 0f,
+            width = 549f,
+            height = 354f,
             event = Event.DESK_LOCKER_ITEM_CLICKED
     )
 
     object DeskLockerShelfItem : ScreenItem(
-            drawable = Drawable("phone.png"), //TODO: replace
-            x = 1000f,
-            y = 200f,
-            width = 160f,
-            height = 160f,
+            drawable = Drawable("workplace_screen_locker_box.png"),
+            x = 1300f,
+            y = 0f,
+            width = 540f,
+            height = 312f,
             event = null
     )
 
     object ChargerItem : ScreenItem(
-            drawable = Drawable("phone.png"), //TODO: replace
-            x = 1000f,
-            y = 200f,
+            drawable = Drawable("workplace_screen_charger.png"),
+            x = 1450f,
+            y = 130f,
             width = 160f,
-            height = 160f,
-            event = Event.CHARGER_TAKEN
+            height = 158f,
+            event = Event.CHARGER_CLICKED
     )
 }

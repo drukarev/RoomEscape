@@ -81,16 +81,18 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
 
             // Locker screen
 
-            Event.PHONE_FROM_LOCKER_TAKEN -> {
+            Event.PHONE_IN_LOCKER_CLICKED -> {
                 lockerScreen.screenObjects.remove(LockerScreen.PhoneItem)
                 inventory.add(InventoryItem.Phone)
             }
 
             Event.TABLET_CLICKED -> {
-                currentScreen = tabletScreen
+//                currentScreen = tabletScreen
+                lockerScreen.screenObjects.remove(LockerScreen.LockerDoorClosed)
+                lockerScreen.screenObjects.remove(LockerScreen.TabletItem)
             }
 
-            Event.LOCKER_CLICKED -> {
+            Event.LOCKER_DOOR_CLICKED -> {
                 if (lockerScreen.screenObjects.find { it == LockerScreen.LockerDoorClosed } != null) {
                     showTemporaryText("That's a stand with mobile phones. It is locked.")
                 }
@@ -132,7 +134,7 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
 
             Event.DESK_LOCKER_ITEM_CLICKED -> {
                 if (selectedItem == InventoryItem.Key) {
-                    inventory.remove(InventoryItem.Key)
+//                    inventory.remove(InventoryItem.Key)
                     workplaceScreen.screenObjects.add(WorkplaceScreen.DeskLockerShelfItem)
                     workplaceScreen.screenObjects.add(WorkplaceScreen.ChargerItem)
                 } else {
@@ -142,8 +144,7 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
 
             Event.PHONE_HOLDER_CLICKED -> {
                 if (selectedItem == InventoryItem.Phone) {
-                    inventory.remove(InventoryItem.Phone)
-                    workplaceScreen.screenObjects.remove(WorkplaceScreen.PhoneHolderItem)
+//                    inventory.remove(InventoryItem.Phone)
                     workplaceScreen.screenObjects.add(WorkplaceScreen.PhoneHolderWithMobileItem)
                 } else {
                     showTemporaryText("Looks like a phone holder.")
@@ -152,8 +153,9 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
 
             Event.POWER_SOCKET_ITEM_CLICKED -> {
                 if (selectedItem == InventoryItem.Charger) {
-                    inventory.remove(InventoryItem.Charger)
+//                    inventory.remove(InventoryItem.Charger)
                     workplaceScreen.screenObjects.add(WorkplaceScreen.ConnectedChargerItem)
+                    workplaceScreen.screenObjects.add(WorkplaceScreen.NotebookOnItem)
                 }
             }
 
@@ -165,7 +167,11 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
                 }
             }
 
-            Event.CHARGER_TAKEN -> {
+            Event.CONNECTED_PHONE_CLICKED -> {
+                showTemporaryText("Ready for debug")
+            }
+
+            Event.CHARGER_CLICKED -> {
                 workplaceScreen.screenObjects.remove(WorkplaceScreen.ChargerItem)
                 inventory.add(InventoryItem.Charger)
             }
@@ -267,7 +273,10 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
             Event.INVENTORY_SCREWDRIVER_CLICKED -> selectedItem = InventoryItem.Screwdriver
             Event.INVENTORY_CHARGER_CLICKED -> selectedItem = InventoryItem.Charger
         }
-        selectedItem = null
+        if (event != Event.INVENTORY_CHARGER_CLICKED && event != Event.INVENTORY_SCREWDRIVER_CLICKED &&
+                event != Event.INVENTORY_KEY_CLICKED && event != Event.INVENTORY_PHONE_CLICKED) {
+            selectedItem = null
+        }
     }
 
     private fun showTemporaryText(text: String) {
@@ -285,7 +294,7 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
     class LeftArrowItem : ScreenItem(
             drawable = Drawable("arrow_left.png"),
             x = 50f,
-            y = 530f,
+            y = 230f,
             width = 80f,
             height = 80f,
             event = Event.LEFT_ARROW_CLICKED)
@@ -293,7 +302,7 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
     class RightArrowItem : ScreenItem(
             drawable = Drawable("arrow_right.png"),
             x = 1830f,
-            y = 530f,
+            y = 230f,
             width = 80f,
             height = 80f,
             event = Event.RIGHT_ARROW_CLICKED
@@ -302,7 +311,7 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
     class DownArrowItem() : ScreenItem(
             drawable = Drawable("arrow_down.png"),
             x = 1830f,
-            y = 530f,
+            y = 30f,
             width = 80f,
             height = 80f,
             event = Event.DOWN_ARROW_CLICKED
