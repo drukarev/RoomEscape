@@ -3,9 +3,6 @@ package com.room.game.stage1
 import com.room.game.core.*
 
 class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener {
-    override val ui: MutableList<ScreenItem> = mutableListOf(
-            LeftArrowItem(),
-            RightArrowItem())
 
     private val titleScreen = TitleScreen(uiHandler = stageUiHandler)
     private val whiteBoardScreen = WhiteBoardScreen(null, null, null, stageUiHandler)
@@ -61,7 +58,16 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
         currentScreen.screenObjects.forEach {
             stageUiHandler.addScreenItem(it)
         }
-        ui.forEach { stageUiHandler.addScreenItem(it) }
+
+        currentScreen.downScreen?.also {
+            stageUiHandler.addScreenItem(DownArrowItem)
+        }
+        currentScreen.leftScreen?.also {
+            stageUiHandler.addScreenItem(LeftArrowItem)
+        }
+        currentScreen.rightScreen?.also {
+            stageUiHandler.addScreenItem(RightArrowItem)
+        }
     }
 
     override fun onEvent(event: Event) {
@@ -289,7 +295,7 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
         stageUiHandler.addScreenItem(screenItem)
     }
 
-    class LeftArrowItem : ScreenItem(
+    object LeftArrowItem : ScreenItem(
             drawable = Drawable("arrow_left.png"),
             x = 50f,
             y = 230f,
@@ -297,7 +303,7 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
             height = 80f,
             event = Event.LEFT_ARROW_CLICKED)
 
-    class RightArrowItem : ScreenItem(
+    object RightArrowItem : ScreenItem(
             drawable = Drawable("arrow_right.png"),
             x = 1830f,
             y = 230f,
@@ -306,9 +312,9 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
             event = Event.RIGHT_ARROW_CLICKED
     )
 
-    class DownArrowItem() : ScreenItem(
+    object DownArrowItem : ScreenItem(
             drawable = Drawable("arrow_down.png"),
-            x = 1830f,
+            x = 920f,
             y = 30f,
             width = 80f,
             height = 80f,

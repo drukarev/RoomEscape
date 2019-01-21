@@ -14,7 +14,7 @@ class NotebookScreen(
 ) : Screen(leftScreen, rightScreen, downScreen, screenObjects, uiHandler) {
 
     object Background : ScreenItem(
-            drawable = Drawable("1.jpg"), //TODO: replace
+            drawable = Drawable("phone.png"), //TODO: replace
             x = 0f,
             y = 0f,
             width = 1920f,
