@@ -10,11 +10,20 @@ class WhiteBoardScreen(
         rightScreen: Screen?,
         downScreen: Screen?,
         uiHandler: StageUiHandler,
-        screenObjects: MutableList<ScreenItem> =
-                mutableListOf(Message134Item, TvItem, WhiteBoardImageItem, WhiteBoardNoteItem, LeftScrewItem, RightScrewItem)
+        screenObjects: MutableList<ScreenItem> = mutableListOf(
+                Background, Message134Item, TvItem, WhiteBoardImageItem,
+                WhiteBoardNoteItem, LeftScrewItem, RightScrewItem
+        )
 ) : Screen(leftScreen, rightScreen, downScreen, screenObjects, uiHandler) {
 
-    override val background: Drawable = Drawable("whiteboard_screen_background.jpg")
+    object Background : ScreenItem(
+            drawable = Drawable("whiteboard_screen_background.jpg"),
+            x = 0f,
+            y = 0f,
+            width = 1920f,
+            height = 1080f,
+            event = null
+    )
 
     object LeftScrewItem : ScreenItem(
             drawable = Drawable("whiteboard_screen_screw_left.png"),

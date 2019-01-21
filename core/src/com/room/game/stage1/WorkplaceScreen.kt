@@ -11,10 +11,17 @@ class WorkplaceScreen(
         downScreen: Screen?,
         uiHandler: StageUiHandler,
         screenObjects: MutableList<ScreenItem> =
-                mutableListOf(PowerSocketItem, PhoneHolderItem, NotebookItem, DeskLockerItem)
+                mutableListOf(Background, PowerSocketItem, PhoneHolderItem, NotebookItem, DeskLockerItem)
 ) : Screen(leftScreen, rightScreen, downScreen, screenObjects, uiHandler) {
 
-    override val background: Drawable = Drawable("workplace_screen_background.jpg")
+    object Background : ScreenItem(
+            drawable = Drawable("workplace_screen_background.jpg"),
+            x = 0f,
+            y = 0f,
+            width = 1920f,
+            height = 1080f,
+            event = null
+    )
 
     object PowerSocketItem : ScreenItem(
             drawable = Drawable("workplace_screen_power_socket.png"),

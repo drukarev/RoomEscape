@@ -6,8 +6,6 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
     override val ui: MutableList<ScreenItem> = mutableListOf(
             LeftArrowItem(),
             RightArrowItem())
-    override val floor: Screen? = null
-    override val ceiling: Screen? = null
 
     private val titleScreen = TitleScreen(uiHandler = stageUiHandler)
     private val whiteBoardScreen = WhiteBoardScreen(null, null, null, stageUiHandler)

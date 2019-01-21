@@ -10,10 +10,17 @@ class SnowmanScreen(
         rightScreen: Screen?,
         downScreen: Screen?,
         uiHandler: StageUiHandler,
-        screenObjects: MutableList<ScreenItem> = mutableListOf(BlohajItem, SnowmanItem, KeyItem)
+        screenObjects: MutableList<ScreenItem> = mutableListOf(Background, BlohajItem, SnowmanItem, KeyItem)
 ) : Screen(leftScreen, rightScreen, downScreen, screenObjects, uiHandler) {
 
-    override val background: Drawable = Drawable("snowman_screen_background.jpg")
+    object Background : ScreenItem(
+            drawable = Drawable("snowman_screen_background.jpg"),
+            x = 0f,
+            y = 0f,
+            width = 1920f,
+            height = 1080f,
+            event = null
+    )
 
     object KeyItem : ScreenItem(
             drawable = Drawable("snowman_screen_key.png"),

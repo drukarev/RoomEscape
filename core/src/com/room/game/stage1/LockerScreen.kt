@@ -10,10 +10,17 @@ class LockerScreen(
         rightScreen: Screen?,
         downScreen: Screen?,
         uiHandler: StageUiHandler,
-        screenObjects: MutableList<ScreenItem> = mutableListOf(PhoneItem, LockerDoorClosed, TabletItem)
+        screenObjects: MutableList<ScreenItem> = mutableListOf(Background, PhoneItem, LockerDoorClosed, TabletItem)
 ) : Screen(leftScreen, rightScreen, downScreen, screenObjects, uiHandler) {
 
-    override val background: Drawable = Drawable("locker_screen_background.jpg")
+    object Background : ScreenItem(
+            drawable = Drawable("locker_screen_background.jpg"),
+            x = 0f,
+            y = 0f,
+            width = 1920f,
+            height = 1080f,
+            event = null
+    )
 
     object PhoneItem : ScreenItem(
             drawable = Drawable("locker_screen_phone.png"),

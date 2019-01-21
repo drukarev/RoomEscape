@@ -10,10 +10,17 @@ class NotebookScreen(
         rightScreen: Screen? = null,
         downScreen: Screen?,
         uiHandler: StageUiHandler,
-        screenObjects: MutableList<ScreenItem> = mutableListOf()
+        screenObjects: MutableList<ScreenItem> = mutableListOf(Background)
 ) : Screen(leftScreen, rightScreen, downScreen, screenObjects, uiHandler) {
 
-    override val background: Drawable = Drawable("background3.jpg")
+    object Background : ScreenItem(
+            drawable = Drawable("1.jpg"), //TODO: replace
+            x = 0f,
+            y = 0f,
+            width = 1920f,
+            height = 1080f,
+            event = null
+    )
 
     object FixBugButton : ScreenItem(
             drawable = Drawable("phone.png"), //TODO: replace

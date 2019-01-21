@@ -10,10 +10,17 @@ class TitleScreen(
         rightScreen: Screen? = null,
         downScreen: Screen? = null,
         uiHandler: StageUiHandler,
-        screenObjects: MutableList<ScreenItem> = mutableListOf(StartGameItem, MusicItem)
+        screenObjects: MutableList<ScreenItem> = mutableListOf(Background, StartGameItem, MusicItem)
 ) : Screen(leftScreen, rightScreen, downScreen, screenObjects, uiHandler) {
 
-    override val background: Drawable = Drawable("title_screen_background.jpg")
+    object Background : ScreenItem(
+            drawable = Drawable("title_screen_background.jpg"),
+            x = 0f,
+            y = 0f,
+            width = 1920f,
+            height = 1080f,
+            event = null
+    )
 
     object StartGameItem : ScreenItem(
             drawable = Drawable("title_screen_start.jpg"),

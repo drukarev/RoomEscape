@@ -58,10 +58,10 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
 
         val frames = Array(4) {
             TextureRegion(Texture(when (it) {
-                0 -> "background2.jpg"
-                1 -> "background2.jpg"
-                2 -> "background3.jpg"
-                else -> "background4.jpg"
+                0 -> "arrow_down.png"
+                1 -> "arrow_left.png"
+                2 -> "arrow_right.png"
+                else -> "arrow_down.png"
             }))
         }
         clickAnimation = Animation(0.1f, *frames)
@@ -90,9 +90,6 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
         batch.apply {
             projectionMatrix = camera.combined
             begin()
-            //TODO: move Texture creation out of render()
-            val background = Texture(currentStage.currentScreen.background.resourceId)
-            Sprite(background).draw(this)
 
             if (clickAnimationStateTime < 0.4f) {
                 val currentFrame = clickAnimation.getKeyFrame(clickAnimationStateTime, false)
