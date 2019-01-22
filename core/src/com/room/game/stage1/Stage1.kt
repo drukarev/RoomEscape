@@ -2,7 +2,7 @@ package com.room.game.stage1
 
 import com.room.game.core.*
 
-class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener {
+class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener {
 
     private val titleScreen = TitleScreen(uiHandler = stageUiHandler)
     private val whiteBoardScreen = WhiteBoardScreen(null, null, null, stageUiHandler)

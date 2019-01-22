@@ -52,6 +52,7 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
         viewport = FitViewport(1920f, 1080f, camera)
         libgdxStage = LibgdxStage(viewport)
         font = BitmapFont()
+        assetManager = AssetManager()
 
         currentStage = Stage1(this)
         eventHandler = EventHandler(listOf(currentStage as EventHandler.Listener))
@@ -82,20 +83,20 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
     }
 
     private fun setMusic() {
-        assetManager = AssetManager().apply {
-            val musicName = "hard_boiled.mp3"
-            load(musicName, Music::class.java)
-            finishLoading()
-            update()
-            music = get(musicName)
-            music.play()
-            music.isLooping = true
-        }
+//        assetManager.apply {
+//            val musicName = "hard_boiled.mp3"
+//            load(musicName, Music::class.java)
+//            finishLoading()
+//            update()
+//            music = get(musicName)
+//            music.play()
+//            music.isLooping = true
+//        }
     }
 
     override fun render() {
-        Gdx.gl.glClearColor(0f, 0f, 0f, 0f)
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+        Gdx.gl.glClearColor(1f, 1f, 1f, 1f)
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT or GL20.GL_DEPTH_BUFFER_BIT)
 
         if (clickAnimationStateTime < 0.5f) {
             clickAnimationStateTime += Gdx.graphics.deltaTime
@@ -144,7 +145,7 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
         libgdxStage.dispose()
         removeAllScreenElements()
         font.dispose()
-        music.dispose()
+//        music.dispose()
         shapeRenderer.dispose()
         clickAnimationTexture1.dispose()
         clickAnimationTexture2.dispose()
@@ -204,6 +205,7 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
         Timer.schedule(object : Timer.Task() {
             override fun run() {
                 libgdxStage.actors.removeValue(label, true)
+                label.clear()
             }
         }, 2.3f)
     }
@@ -239,6 +241,7 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
         libgdxStage.actors.removeAll { true }
         screenItems.forEach {
             it.value.first.clear()
+            it.value.second.dispose()
         }
         screenTexts.forEach {
             it.value.clear()
@@ -248,11 +251,11 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
     }
 
     override fun startMusic() {
-        music.play()
+//        music.play()
     }
 
     override fun stopMusic() {
-        music.pause()
+//        music.pause()
     }
 
     private inner class GestureListener : GestureDetector.GestureListener {
