@@ -28,7 +28,6 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
     private lateinit var batch: SpriteBatch
     private lateinit var currentStage: Stage
     private lateinit var libgdxStage: LibgdxStage
-    private lateinit var shapeRenderer: ShapeRenderer
     private lateinit var camera: Camera
     private lateinit var viewport: FitViewport
     private lateinit var font: BitmapFont
@@ -47,7 +46,6 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
 
     override fun create() {
         batch = SpriteBatch()
-        shapeRenderer = ShapeRenderer()
         camera = OrthographicCamera()
         viewport = FitViewport(1920f, 1080f, camera)
         libgdxStage = LibgdxStage(viewport)
@@ -111,27 +109,8 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
             end()
         }
 
-        drawInventory()
-
         libgdxStage.act()
         libgdxStage.draw()
-    }
-
-    private fun drawInventory() {
-        shapeRenderer.apply {
-            begin(ShapeRenderer.ShapeType.Filled)
-            setColor(240f, 240f, 240f, 20f)
-            rect(viewport.worldWidth - 60f, 0f, 60f, viewport.worldHeight)
-            end()
-        }
-
-        var margin = 0f
-        currentStage.inventory.map {
-            margin += 200f
-            ScreenItem(it.drawable, viewport.worldWidth - 200f, viewport.worldHeight - margin, 160f, 160f, it.event)
-        }.forEach {
-            addScreenItem(it)
-        }
     }
 
     override fun resize(width: Int, height: Int) {
@@ -146,7 +125,6 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
         removeAllScreenElements()
         font.dispose()
 //        music.dispose()
-        shapeRenderer.dispose()
         clickAnimationTexture1.dispose()
         clickAnimationTexture2.dispose()
         clickAnimationTexture3.dispose()

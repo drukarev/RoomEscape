@@ -12,10 +12,10 @@ class ObservableArrayList<E> {
         get() = delegate.size
 
     fun remove(element: E) {
+        delegate.remove(element)
         listeners.forEach {
             it.onElementRemoved(element)
         }
-        delegate.remove(element)
     }
 
     fun add(element: E) {
@@ -54,8 +54,13 @@ class ObservableArrayList<E> {
         listeners.removeAll { true }
     }
 
+    fun refresh() {
+        listeners.forEach { it.onRefresh() }
+    }
+
     interface Listener<E> {
         fun onElementAdded(element: E)
         fun onElementRemoved(element: E)
+        fun onRefresh() {}
     }
 }

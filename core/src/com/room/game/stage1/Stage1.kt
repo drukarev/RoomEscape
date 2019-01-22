@@ -20,8 +20,43 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
         snowmanScreen.rightScreen = workplaceScreen
     }
 
+    override val inventory: ObservableArrayList<InventoryItem> = ObservableArrayList<InventoryItem>().apply {
+        addListener(object : ObservableArrayList.Listener<InventoryItem> {
+
+            var margin = 0f
+            val screenItems = mutableListOf<ScreenItem>()
+
+            override fun onElementAdded(element: InventoryItem) {
+                addScreenItems(element)
+            }
+
+            override fun onElementRemoved(element: InventoryItem) {
+                screenItems.forEach {
+                    stageUiHandler.removeScreenItem(it)
+                }
+                screenItems.removeAll { true }
+                margin = 0f
+                forEach {
+                    addScreenItems(it)
+                }
+            }
+
+            override fun onRefresh() {
+                screenItems.forEach {
+                    stageUiHandler.addScreenItem(it)
+                }
+            }
+
+            private fun addScreenItems(element: InventoryItem) {
+                margin += 200f
+                val screenItem = ScreenItem(element.drawable, 1720f, 1080 - margin, 160f, 160f, element.event)
+                screenItems.add(screenItem)
+                stageUiHandler.addScreenItem(screenItem)
+            }
+        })
+    }
+
     override val screens = listOf(whiteBoardScreen, lockerScreen, snowmanScreen, workplaceScreen)
-    override val inventory: MutableList<InventoryItem> = mutableListOf()
 
     override var currentScreen: Screen = titleScreen
         set(value) {
@@ -55,6 +90,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
 
     private fun prepareForCurrentScreen() {
         stageUiHandler.removeAllScreenElements()
+
         currentScreen.screenObjects.forEach {
             stageUiHandler.addScreenItem(it)
         }
@@ -68,6 +104,8 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
         currentScreen.rightScreen?.also {
             stageUiHandler.addScreenItem(RightArrowItem)
         }
+
+        inventory.refresh()
     }
 
     override fun onEvent(event: Event) {
@@ -138,7 +176,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
 
             Event.DESK_LOCKER_ITEM_CLICKED -> {
                 if (selectedItem == InventoryItem.Key) {
-//                    inventory.remove(InventoryItem.Key)
+                    inventory.remove(InventoryItem.Key)
                     workplaceScreen.screenObjects.add(WorkplaceScreen.DeskLockerShelfItem)
                     workplaceScreen.screenObjects.add(WorkplaceScreen.ChargerItem)
                 } else {
@@ -148,7 +186,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
 
             Event.PHONE_HOLDER_CLICKED -> {
                 if (selectedItem == InventoryItem.Phone) {
-//                    inventory.remove(InventoryItem.Phone)
+                    inventory.remove(InventoryItem.Phone)
                     workplaceScreen.screenObjects.add(WorkplaceScreen.PhoneHolderWithMobileItem)
                 } else {
                     showTemporaryText("Looks like a phone holder")
@@ -157,7 +195,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
 
             Event.POWER_SOCKET_ITEM_CLICKED -> {
                 if (selectedItem == InventoryItem.Charger) {
-//                    inventory.remove(InventoryItem.Charger)
+                    inventory.remove(InventoryItem.Charger)
                     workplaceScreen.screenObjects.add(WorkplaceScreen.ConnectedChargerItem)
                     workplaceScreen.screenObjects.add(WorkplaceScreen.NotebookOnItem)
                 }
@@ -216,11 +254,12 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
             // WhiteBoardScreen
 
             Event.LEFT_SCREW_CLICKED -> {
-                if (inventory.find { it == InventoryItem.Screwdriver } != null) {
+                if (selectedItem == InventoryItem.Screwdriver) {
                     whiteBoardScreen.screenObjects.remove(WhiteBoardScreen.LeftScrewItem)
                     if (whiteBoardScreen.screenObjects.find { it == WhiteBoardScreen.RightScrewItem } == null) {
                         whiteBoardScreen.screenObjects.remove(WhiteBoardScreen.TvLeftScrewItem)
                         whiteBoardScreen.screenObjects.add(WhiteBoardScreen.TvBrokenItem)
+                        inventory.remove(InventoryItem.Screwdriver)
                     } else {
                         whiteBoardScreen.screenObjects.add(WhiteBoardScreen.TvRightScrewItem)
                         whiteBoardScreen.screenObjects.remove(WhiteBoardScreen.TvItem)
@@ -228,11 +267,12 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
                 }
             }
             Event.RIGHT_SCREW_CLICKED -> {
-                if (inventory.find { it == InventoryItem.Screwdriver } != null) {
+                if (selectedItem == InventoryItem.Screwdriver) {
                     whiteBoardScreen.screenObjects.remove(WhiteBoardScreen.RightScrewItem)
                     if (whiteBoardScreen.screenObjects.find { it == WhiteBoardScreen.LeftScrewItem } == null) {
                         whiteBoardScreen.screenObjects.remove(WhiteBoardScreen.TvRightScrewItem)
                         whiteBoardScreen.screenObjects.add(WhiteBoardScreen.TvBrokenItem)
+                        inventory.remove(InventoryItem.Screwdriver)
                     } else {
                         whiteBoardScreen.screenObjects.add(WhiteBoardScreen.TvLeftScrewItem)
                         whiteBoardScreen.screenObjects.remove(WhiteBoardScreen.TvItem)
@@ -287,7 +327,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
         stageUiHandler.addTemporaryScreenText(ScreenText(text))
     }
 
-    private fun showText(screenText: ScreenText) { //TODO this screenText should remain on screen without fade out
+    private fun showText(screenText: ScreenText) {
         stageUiHandler.addScreenText(screenText)
     }
 
