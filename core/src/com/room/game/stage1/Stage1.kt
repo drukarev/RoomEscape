@@ -98,7 +98,7 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
 
             Event.LOCKER_DOOR_CLICKED -> {
                 if (lockerScreen.screenObjects.find { it == LockerScreen.LockerDoorClosed } != null) {
-                    showTemporaryText("That's a stand with mobile phones. It is locked.")
+                    showTemporaryText("That's a stand with mobile phones. It is locked")
                 }
             }
 
@@ -142,7 +142,7 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
                     workplaceScreen.screenObjects.add(WorkplaceScreen.DeskLockerShelfItem)
                     workplaceScreen.screenObjects.add(WorkplaceScreen.ChargerItem)
                 } else {
-                    showTemporaryText("This locker is closed.")
+                    showTemporaryText("This locker is closed")
                 }
             }
 
@@ -151,7 +151,7 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
 //                    inventory.remove(InventoryItem.Phone)
                     workplaceScreen.screenObjects.add(WorkplaceScreen.PhoneHolderWithMobileItem)
                 } else {
-                    showTemporaryText("Looks like a phone holder.")
+                    showTemporaryText("Looks like a phone holder")
                 }
             }
 
@@ -241,7 +241,7 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
             }
 
             Event.TV_CLICKED -> {
-                showTemporaryText("I don't want to look at this")
+                showTemporaryText("Let's pretend I didn't see this")
             }
 
             Event.MESSAGE_134_CLICKED -> {
@@ -249,11 +249,11 @@ class Stage1(val stageUiHandler: StageUiHandler) : Stage, EventHandler.Listener 
             }
 
             Event.WHITEBOARD_IMAGE_CLICKED -> {
-                showTemporaryText("What?")
+                showTemporaryText("That's some modern art right there")
             }
 
             Event.WHITEBOARD_NOTE_CLICKED -> {
-                showTemporaryText("""It says "One bug remaining till new release"""")
+                showTemporaryText("""It says "One bug remaining till new release". I doubt it""")
             }
 
             Event.BROKEN_TV_CLICKED -> {

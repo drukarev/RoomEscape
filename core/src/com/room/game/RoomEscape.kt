@@ -33,8 +33,13 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
     private lateinit var viewport: FitViewport
     private lateinit var font: BitmapFont
     private lateinit var music: Music
+    private lateinit var assetManager: AssetManager
 
     private lateinit var eventHandler: EventHandler
+
+    private lateinit var clickAnimationTexture1: Texture
+    private lateinit var clickAnimationTexture2: Texture
+    private lateinit var clickAnimationTexture3: Texture
 
     private lateinit var clickAnimation: Animation<TextureRegion>
     private var clickAnimationStateTime = 100f
@@ -56,21 +61,28 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
         inputMultiplexer.addProcessor(libgdxStage)
         Gdx.input.inputProcessor = inputMultiplexer
 
-        val frames = Array(4) {
-            TextureRegion(Texture(when (it) {
-                0 -> "arrow_down.png"
-                1 -> "arrow_left.png"
-                2 -> "arrow_right.png"
-                else -> "arrow_down.png"
-            }))
-        }
-        clickAnimation = Animation(0.1f, *frames)
+        setupClickAnimation()
 
         setMusic()
     }
 
+    private fun setupClickAnimation() {
+        clickAnimationTexture1 = Texture("arrow_down.png")
+        clickAnimationTexture2 = Texture("arrow_left.png")
+        clickAnimationTexture3 = Texture("arrow_right.png")
+        val frames = Array(4) {
+            TextureRegion(when (it) {
+                0 -> clickAnimationTexture1
+                1 -> clickAnimationTexture2
+                2 -> clickAnimationTexture3
+                else -> clickAnimationTexture1
+            })
+        }
+        clickAnimation = Animation(0.1f, *frames)
+    }
+
     private fun setMusic() {
-        AssetManager().apply {
+        assetManager = AssetManager().apply {
             val musicName = "hard_boiled.mp3"
             load(musicName, Music::class.java)
             finishLoading()
@@ -85,17 +97,16 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
         Gdx.gl.glClearColor(0f, 0f, 0f, 0f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
-        clickAnimationStateTime += Gdx.graphics.deltaTime
+        if (clickAnimationStateTime < 0.5f) {
+            clickAnimationStateTime += Gdx.graphics.deltaTime
+        }
 
         batch.apply {
-            projectionMatrix = camera.combined
             begin()
-
             if (clickAnimationStateTime < 0.4f) {
                 val currentFrame = clickAnimation.getKeyFrame(clickAnimationStateTime, false)
                 draw(currentFrame, clickAnimationCoordinates.x, clickAnimationCoordinates.y, 40f, 40f)
             }
-
             end()
         }
 
@@ -135,6 +146,10 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
         font.dispose()
         music.dispose()
         shapeRenderer.dispose()
+        clickAnimationTexture1.dispose()
+        clickAnimationTexture2.dispose()
+        clickAnimationTexture3.dispose()
+        assetManager.dispose()
     }
 
     private val screenItems: MutableMap<ScreenItem, Pair<ImageButton, Texture>> = mutableMapOf()
@@ -160,11 +175,13 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
 
     override fun removeScreenItem(screenItem: ScreenItem) {
         val actor = screenItems.getValue(screenItem)
-        actor.first.addAction(Actions.fadeOut(0.1f))
+        val action = Actions.fadeOut(0.1f)
+        actor.first.addAction(action)
         Timer.schedule(object : Timer.Task() {
             override fun run() {
                 libgdxStage.actors.removeValue(actor.first, true)
                 screenItems.remove(screenItem)
+                actor.first.clear()
                 actor.second.dispose()
             }
         }, 0.1f)
@@ -172,7 +189,7 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
 
     override fun addTemporaryScreenText(screenText: ScreenText) {
         val style = Label.LabelStyle()
-        style.font = BitmapFont()
+        style.font = font
         val label = Label(screenText.text, style)
         label.setPosition(screenText.x, screenText.y)
         label.setFontScale(5f, 5f)
@@ -211,6 +228,7 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
         Timer.schedule(object : Timer.Task() {
             override fun run() {
                 libgdxStage.actors.removeValue(actor, true)
+                actor.clear()
                 screenTexts.remove(screenText)
             }
 
@@ -219,6 +237,12 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
 
     override fun removeAllScreenElements() {
         libgdxStage.actors.removeAll { true }
+        screenItems.forEach {
+            it.value.first.clear()
+        }
+        screenTexts.forEach {
+            it.value.clear()
+        }
         screenItems.clear()
         screenTexts.clear()
     }
