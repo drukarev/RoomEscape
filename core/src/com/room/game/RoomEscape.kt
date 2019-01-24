@@ -166,6 +166,11 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
         }, 0.1f)
     }
 
+    override fun moveScreenItemToBottom(screenItem: ScreenItem) {
+        val actor = screenItems.getValue(screenItem)
+        actor.first.zIndex = 0
+    }
+
     override fun addTemporaryScreenText(screenText: ScreenText) {
         val style = Label.LabelStyle()
         style.font = font

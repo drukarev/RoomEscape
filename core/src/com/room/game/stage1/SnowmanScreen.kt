@@ -48,4 +48,8 @@ class SnowmanScreen(
             height = 828f,
             event = Event.SNOWMAN_CLICKED
     )
+
+    companion object {
+        var alreadyTookScrewdriver = false
+    }
 }

@@ -20,41 +20,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
         snowmanScreen.rightScreen = workplaceScreen
     }
 
-    override val inventory: ObservableArrayList<InventoryItem> = ObservableArrayList<InventoryItem>().apply {
-        addListener(object : ObservableArrayList.Listener<InventoryItem> {
-
-            var margin = 0f
-            val screenItems = mutableListOf<ScreenItem>()
-
-            override fun onElementAdded(element: InventoryItem) {
-                addScreenItems(element)
-            }
-
-            override fun onElementRemoved(element: InventoryItem) {
-                screenItems.forEach {
-                    stageUiHandler.removeScreenItem(it)
-                }
-                screenItems.removeAll { true }
-                margin = 0f
-                forEach {
-                    addScreenItems(it)
-                }
-            }
-
-            override fun onRefresh() {
-                screenItems.forEach {
-                    stageUiHandler.addScreenItem(it)
-                }
-            }
-
-            private fun addScreenItems(element: InventoryItem) {
-                margin += 200f
-                val screenItem = ScreenItem(element.drawable, 1720f, 1080 - margin, 160f, 160f, element.event)
-                screenItems.add(screenItem)
-                stageUiHandler.addScreenItem(screenItem)
-            }
-        })
-    }
+    override val inventory: Inventory = Inventory(stageUiHandler)
 
     override val screens = listOf(whiteBoardScreen, lockerScreen, snowmanScreen, workplaceScreen)
 
@@ -63,8 +29,6 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
             field = value
             prepareForCurrentScreen()
         }
-
-    private var selectedItem: InventoryItem? = null
 
     private var musicOn = true
         set(value) {
@@ -105,7 +69,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
             stageUiHandler.addScreenItem(RightArrowItem)
         }
 
-        inventory.refresh()
+        inventory.redraw()
     }
 
     override fun onEvent(event: Event) {
@@ -175,7 +139,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
             // Workplace screen
 
             Event.DESK_LOCKER_ITEM_CLICKED -> {
-                if (selectedItem == InventoryItem.Key) {
+                if (inventory.selectedItem == InventoryItem.Key) {
                     inventory.remove(InventoryItem.Key)
                     workplaceScreen.screenObjects.add(WorkplaceScreen.DeskLockerShelfItem)
                     workplaceScreen.screenObjects.add(WorkplaceScreen.ChargerItem)
@@ -185,7 +149,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
             }
 
             Event.PHONE_HOLDER_CLICKED -> {
-                if (selectedItem == InventoryItem.Phone) {
+                if (inventory.selectedItem == InventoryItem.Phone) {
                     inventory.remove(InventoryItem.Phone)
                     workplaceScreen.screenObjects.add(WorkplaceScreen.PhoneHolderWithMobileItem)
                 } else {
@@ -194,7 +158,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
             }
 
             Event.POWER_SOCKET_ITEM_CLICKED -> {
-                if (selectedItem == InventoryItem.Charger) {
+                if (inventory.selectedItem == InventoryItem.Charger) {
                     inventory.remove(InventoryItem.Charger)
                     workplaceScreen.screenObjects.add(WorkplaceScreen.ConnectedChargerItem)
                     workplaceScreen.screenObjects.add(WorkplaceScreen.NotebookOnItem)
@@ -238,12 +202,12 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
             }
 
             Event.BLOHAJ_CLICKED -> {
-                val alreadyHasScrewdriver = inventory.find { it == InventoryItem.Screwdriver } != null
-                if (alreadyHasScrewdriver) {
+                if (SnowmanScreen.alreadyTookScrewdriver) {
                     showTemporaryText("Still a very fluffy shark")
                 } else {
                     showTemporaryText("A very fluffy shark. It has a screwdriver in its jaws")
                     inventory.add(InventoryItem.Screwdriver)
+                    SnowmanScreen.alreadyTookScrewdriver = true
                 }
             }
 
@@ -254,7 +218,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
             // WhiteBoardScreen
 
             Event.LEFT_SCREW_CLICKED -> {
-                if (selectedItem == InventoryItem.Screwdriver) {
+                if (inventory.selectedItem == InventoryItem.Screwdriver) {
                     whiteBoardScreen.screenObjects.remove(WhiteBoardScreen.LeftScrewItem)
                     if (whiteBoardScreen.screenObjects.find { it == WhiteBoardScreen.RightScrewItem } == null) {
                         whiteBoardScreen.screenObjects.remove(WhiteBoardScreen.TvLeftScrewItem)
@@ -267,7 +231,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
                 }
             }
             Event.RIGHT_SCREW_CLICKED -> {
-                if (selectedItem == InventoryItem.Screwdriver) {
+                if (inventory.selectedItem == InventoryItem.Screwdriver) {
                     whiteBoardScreen.screenObjects.remove(WhiteBoardScreen.RightScrewItem)
                     if (whiteBoardScreen.screenObjects.find { it == WhiteBoardScreen.LeftScrewItem } == null) {
                         whiteBoardScreen.screenObjects.remove(WhiteBoardScreen.TvRightScrewItem)
@@ -312,14 +276,14 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
 
             // Inventory items
 
-            Event.INVENTORY_PHONE_CLICKED -> selectedItem = InventoryItem.Phone
-            Event.INVENTORY_KEY_CLICKED -> selectedItem = InventoryItem.Key
-            Event.INVENTORY_SCREWDRIVER_CLICKED -> selectedItem = InventoryItem.Screwdriver
-            Event.INVENTORY_CHARGER_CLICKED -> selectedItem = InventoryItem.Charger
+            Event.INVENTORY_PHONE_CLICKED -> inventory.selectedItem = InventoryItem.Phone
+            Event.INVENTORY_KEY_CLICKED -> inventory.selectedItem = InventoryItem.Key
+            Event.INVENTORY_SCREWDRIVER_CLICKED -> inventory.selectedItem = InventoryItem.Screwdriver
+            Event.INVENTORY_CHARGER_CLICKED -> inventory.selectedItem = InventoryItem.Charger
         }
         if (event != Event.INVENTORY_CHARGER_CLICKED && event != Event.INVENTORY_SCREWDRIVER_CLICKED &&
                 event != Event.INVENTORY_KEY_CLICKED && event != Event.INVENTORY_PHONE_CLICKED) {
-            selectedItem = null
+            inventory.selectedItem = null
         }
     }
 
