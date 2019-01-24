@@ -68,6 +68,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
         currentScreen.rightScreen?.also {
             stageUiHandler.addScreenItem(RightArrowItem)
         }
+        stageUiHandler.addScreenItem(MusicItem)
 
         inventory.redraw()
     }
@@ -79,10 +80,6 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
 
             Event.START_GAME -> {
                 currentScreen = screens.first()
-            }
-
-            Event.ICON_MUSIC_CLICKED -> {
-                musicOn = !musicOn
             }
 
             // Locker screen
@@ -287,6 +284,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
             Event.LEFT_ARROW_CLICKED -> setCurrentScreen(ArrowDirection.LEFT)
             Event.RIGHT_ARROW_CLICKED -> setCurrentScreen(ArrowDirection.RIGHT)
             Event.DOWN_ARROW_CLICKED -> setCurrentScreen(ArrowDirection.DOWN)
+            Event.ICON_MUSIC_CLICKED -> { musicOn = !musicOn }
 
             // Inventory items
 
@@ -344,6 +342,15 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
             width = 80f,
             height = 80f,
             event = Event.DOWN_ARROW_CLICKED
+    )
+
+    object MusicItem : ScreenItem(
+            drawable = Drawable("title_screen_sound.jpg"),
+            x = 50f,
+            y = 930f,
+            width = 100f,
+            height = 100f,
+            event = Event.ICON_MUSIC_CLICKED
     )
 }
 

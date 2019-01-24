@@ -10,7 +10,7 @@ class TitleScreen(
         rightScreen: Screen? = null,
         downScreen: Screen? = null,
         uiHandler: StageUiHandler,
-        screenObjects: MutableList<ScreenItem> = mutableListOf(Background, StartGameItem, MusicItem)
+        screenObjects: MutableList<ScreenItem> = mutableListOf(Background, StartGameItem)
 ) : Screen(leftScreen, rightScreen, downScreen, screenObjects, uiHandler) {
 
     object Background : ScreenItem(
@@ -29,14 +29,5 @@ class TitleScreen(
             width = 439f,
             height = 148f,
             event = Event.START_GAME
-    )
-
-    object MusicItem : ScreenItem(
-            drawable = Drawable("title_screen_sound.jpg"),
-            x = 200f,
-            y = 50f,
-            width = 162f,
-            height = 144f,
-            event = Event.ICON_MUSIC_CLICKED
     )
 }

@@ -81,15 +81,15 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
     }
 
     private fun setMusic() {
-//        assetManager.apply {
-//            val musicName = "hard_boiled.mp3"
-//            load(musicName, Music::class.java)
-//            finishLoading()
-//            update()
-//            music = get(musicName)
-//            music.play()
-//            music.isLooping = true
-//        }
+        assetManager.apply {
+            val musicName = "hard_boiled.mp3"
+            load(musicName, Music::class.java)
+            finishLoading()
+            update()
+            music = get(musicName)
+            music.play()
+            music.isLooping = true
+        }
     }
 
     override fun render() {
@@ -124,7 +124,7 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
         libgdxStage.dispose()
         removeAllScreenElements()
         font.dispose()
-//        music.dispose()
+        music.dispose()
         clickAnimationTexture1.dispose()
         clickAnimationTexture2.dispose()
         clickAnimationTexture3.dispose()
@@ -240,11 +240,11 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
     }
 
     override fun startMusic() {
-//        music.play()
+        music.play()
     }
 
     override fun stopMusic() {
-//        music.pause()
+        music.pause()
     }
 
     private inner class GestureListener : GestureDetector.GestureListener {
