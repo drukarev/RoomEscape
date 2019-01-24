@@ -93,9 +93,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
             }
 
             Event.TABLET_CLICKED -> {
-//                currentScreen = tabletScreen
-                lockerScreen.screenObjects.remove(LockerScreen.LockerDoorClosed)
-                lockerScreen.screenObjects.remove(LockerScreen.TabletItem)
+                currentScreen = tabletScreen
             }
 
             Event.LOCKER_DOOR_CLICKED -> {
@@ -107,34 +105,46 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
             // Tablet screen
 
             Event.NUMBER_1_BUTTON_CLICKED -> {
-                showText(tabletScreen.getPasscodeText('1'))
+                onTabletButtonClicked('1')
             }
             Event.NUMBER_2_BUTTON_CLICKED -> {
-                showText(tabletScreen.getPasscodeText('2'))
+                onTabletButtonClicked('2')
             }
             Event.NUMBER_3_BUTTON_CLICKED -> {
-                showText(tabletScreen.getPasscodeText('3'))
+                onTabletButtonClicked('3')
             }
             Event.NUMBER_4_BUTTON_CLICKED -> {
-                showText(tabletScreen.getPasscodeText('4'))
+                onTabletButtonClicked('4')
             }
             Event.NUMBER_5_BUTTON_CLICKED -> {
-                showText(tabletScreen.getPasscodeText('5'))
+                onTabletButtonClicked('5')
             }
             Event.NUMBER_6_BUTTON_CLICKED -> {
-                showText(tabletScreen.getPasscodeText('6'))
+                onTabletButtonClicked('6')
             }
             Event.NUMBER_7_BUTTON_CLICKED -> {
-                showText(tabletScreen.getPasscodeText('7'))
+                onTabletButtonClicked('7')
             }
             Event.NUMBER_8_BUTTON_CLICKED -> {
-                showText(tabletScreen.getPasscodeText('8'))
+                onTabletButtonClicked('8')
             }
             Event.NUMBER_9_BUTTON_CLICKED -> {
-                showText(tabletScreen.getPasscodeText('9'))
+                onTabletButtonClicked('9')
             }
+            Event.ENTER_BUTTON_CLICKED -> {
+                val response = tabletScreen.checkPasscode()
 
-            // TODO: add action for successful code verification
+                response.lastScreenText?.also {
+                    stageUiHandler.removeScreenText(it)
+                }
+                stageUiHandler.addScreenText(response.newScreenText)
+
+                if (response.success == TabletScreen.PasscodeState.SUCCESS) {
+                    currentScreen = lockerScreen
+                    lockerScreen.screenObjects.remove(LockerScreen.LockerDoorClosed)
+                    lockerScreen.screenObjects.remove(LockerScreen.TabletItem)
+                }
+            }
 
             // Workplace screen
 
@@ -288,6 +298,13 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
         if (event != Event.INVENTORY_CHARGER_CLICKED && event != Event.INVENTORY_SCREWDRIVER_CLICKED &&
                 event != Event.INVENTORY_KEY_CLICKED && event != Event.INVENTORY_PHONE_CLICKED) {
             inventory.selectedItem = null
+        }
+    }
+
+    private fun onTabletButtonClicked(value: Char) {
+        tabletScreen.addDigit(value).apply {
+            stageUiHandler.removeScreenText(lastScreenText)
+            stageUiHandler.addScreenText(newScreenText)
         }
     }
 

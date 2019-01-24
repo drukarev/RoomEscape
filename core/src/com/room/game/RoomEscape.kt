@@ -93,7 +93,7 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
     }
 
     override fun render() {
-        Gdx.gl.glClearColor(1f, 1f, 1f, 1f)
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT or GL20.GL_DEPTH_BUFFER_BIT)
 
         if (clickAnimationStateTime < 0.5f) {
@@ -153,6 +153,9 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
     }
 
     override fun removeScreenItem(screenItem: ScreenItem) {
+        if (!screenItems.containsKey(screenItem)) {
+            return
+        }
         val actor = screenItems.getValue(screenItem)
         val action = Actions.fadeOut(0.1f)
         actor.first.addAction(action)
@@ -208,11 +211,14 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
     }
 
     override fun removeScreenText(screenText: ScreenText) {
+        if (!screenTexts.containsKey(screenText)) {
+            return
+        }
         val actor = screenTexts.getValue(screenText)
         actor.addAction(Actions.fadeOut(0.1f))
         Timer.schedule(object : Timer.Task() {
             override fun run() {
-                libgdxStage.actors.removeValue(actor, true)
+                libgdxStage.actors.removeValue(actor, false)
                 actor.clear()
                 screenTexts.remove(screenText)
             }

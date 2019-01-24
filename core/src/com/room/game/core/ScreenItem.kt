@@ -11,7 +11,7 @@ open class ScreenItem(
         val event: Event?
 )
 
-open class ScreenText(
+data class ScreenText(
         val text: String,
         val x: Float = 100f,
         val y: Float = 100f

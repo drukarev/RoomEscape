@@ -18,6 +18,7 @@ enum class Event {
     NUMBER_7_BUTTON_CLICKED,
     NUMBER_8_BUTTON_CLICKED,
     NUMBER_9_BUTTON_CLICKED,
+    ENTER_BUTTON_CLICKED,
 
     // Whiteboard screen
 
