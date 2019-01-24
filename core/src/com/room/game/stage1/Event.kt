@@ -30,11 +30,6 @@ enum class Event {
     BROKEN_TV_CLICKED,
     TV_ON_ONE_SCREW_CLICKED,
 
-    // Notebook screen
-
-    FIX_BUG_BUTTON_CLICKED,
-    DEPLOY_BUTTON_CLICKED,
-
     // Snowman screen
 
     BLOHAJ_CLICKED,
@@ -48,17 +43,22 @@ enum class Event {
     TABLET_CLICKED,
 
     // Workplace screen
+
     CHARGER_CLICKED,
     PHONE_HOLDER_CLICKED,
     CONNECTED_PHONE_CLICKED,
-
+    DEPLOY_BUTTON_CLICKED,
     POWER_SOCKET_ITEM_CLICKED,
     NOTEBOOK_CLICKED,
     DESK_LOCKER_ITEM_CLICKED,
 
+    // UI
+
     LEFT_ARROW_CLICKED,
     RIGHT_ARROW_CLICKED,
     DOWN_ARROW_CLICKED,
+
+    // Inventory
 
     INVENTORY_PHONE_CLICKED,
     INVENTORY_KEY_CLICKED,

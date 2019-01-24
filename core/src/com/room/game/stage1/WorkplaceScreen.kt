@@ -11,7 +11,7 @@ class WorkplaceScreen(
         downScreen: Screen?,
         uiHandler: StageUiHandler,
         screenObjects: MutableList<ScreenItem> =
-                mutableListOf(Background, PowerSocketItem, PhoneHolderItem, NotebookItem, DeskLockerItem)
+                mutableListOf(Background, PowerSocketItem, PhoneHolderItem, NotebookItem, DeskLockerItem, DeployButtonItem)
 ) : Screen(leftScreen, rightScreen, downScreen, screenObjects, uiHandler) {
 
     object Background : ScreenItem(
@@ -68,6 +68,15 @@ class WorkplaceScreen(
             event = Event.NOTEBOOK_CLICKED
     )
 
+    object NotebookWithBugFixedItem : ScreenItem(
+            drawable = Drawable("phone.png"), //TODO: replace
+            x = 330f,
+            y = 450f,
+            width = 582f,
+            height = 459f,
+            event = Event.NOTEBOOK_CLICKED
+    )
+
     object ConnectedChargerItem : ScreenItem(
             drawable = Drawable("workplace_screen_connected_charger.png"),
             x = 30f,
@@ -102,5 +111,14 @@ class WorkplaceScreen(
             width = 160f,
             height = 158f,
             event = Event.CHARGER_CLICKED
+    )
+
+    object DeployButtonItem : ScreenItem(
+            drawable = Drawable("phone.png"), //TODO: replace
+            x = 1400f,
+            y = 400f,
+            width = 156f,
+            height = 183f,
+            event = Event.DEPLOY_BUTTON_CLICKED
     )
 }

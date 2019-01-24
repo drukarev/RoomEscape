@@ -10,7 +10,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
     private val lockerScreen = LockerScreen(whiteBoardScreen, snowmanScreen, null, stageUiHandler)
     private val workplaceScreen = WorkplaceScreen(snowmanScreen, whiteBoardScreen, null, stageUiHandler)
     private val tabletScreen = TabletScreen(uiHandler = stageUiHandler, downScreen = lockerScreen)
-    private val notebookScreen = NotebookScreen(uiHandler = stageUiHandler, downScreen = workplaceScreen)
+    private val endScreen = EndScreen(uiHandler = stageUiHandler)
 
     init {
         whiteBoardScreen.leftScreen = workplaceScreen
@@ -166,8 +166,16 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
             }
 
             Event.NOTEBOOK_CLICKED -> {
-                if (workplaceScreen.screenObjects.find { it == WorkplaceScreen.ConnectedChargerItem } != null) {
-                    currentScreen = notebookScreen
+                if (workplaceScreen.screenObjects.find { it == WorkplaceScreen.NotebookWithBugFixedItem } != null) {
+                    showTemporaryText("Bug fixed! Well, it's friday night, let's deploy")
+                } else if (workplaceScreen.screenObjects.find { it == WorkplaceScreen.ConnectedChargerItem } != null) {
+                    if (workplaceScreen.screenObjects.find { it == WorkplaceScreen.PhoneHolderWithMobileItem } != null) {
+                        showTemporaryText("Bug fixed! Well, it's friday night, let's deploy")
+                        workplaceScreen.screenObjects.remove(WorkplaceScreen.NotebookOnItem)
+                        workplaceScreen.screenObjects.add(WorkplaceScreen.NotebookWithBugFixedItem)
+                    } else {
+                        showTemporaryText("Can't fix bug without a phone")
+                    }
                 } else {
                     showTemporaryText("This notebook is out of charge")
                 }
@@ -182,16 +190,12 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
                 inventory.add(InventoryItem.Charger)
             }
 
-            // Notebook screen
-
-            Event.FIX_BUG_BUTTON_CLICKED -> {
-                notebookScreen.screenObjects.add(NotebookScreen.DeployButton)
-                notebookScreen.screenObjects.remove(NotebookScreen.FixBugButton)
-
-            }
-
             Event.DEPLOY_BUTTON_CLICKED -> {
-                showTemporaryText("Congratulations!")
+                if (workplaceScreen.screenObjects.find { it == WorkplaceScreen.NotebookWithBugFixedItem } != null) {
+                    currentScreen = endScreen
+                } else {
+                    showTemporaryText("That's a deploy button. It's tempting")
+                }
             }
 
             // Snowman screen
