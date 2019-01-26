@@ -14,7 +14,7 @@ class Inventory(private val uiHandler: StageUiHandler) {
                 selectedScreenItem = null
             }
             screenItems.find { it.first == value }?.also {
-                uiHandler.playSound(Sound("ui_button_click.wav"))
+                uiHandler.playSound(Sound("ui_button_click.mp3"))
                 val selectedScreenItem = SelectedScreenItem(it.second.x, it.second.y)
                 uiHandler.addScreenItem(selectedScreenItem)
                 this.selectedScreenItem = selectedScreenItem

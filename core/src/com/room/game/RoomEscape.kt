@@ -2,14 +2,10 @@ package com.room.game
 
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.graphics.*
 import com.badlogic.gdx.graphics.g2d.*
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.input.GestureDetector
-import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
@@ -17,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.viewport.FitViewport
 import com.room.game.stage1.Stage1
 import com.badlogic.gdx.scenes.scene2d.Stage as LibgdxStage
-import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
@@ -134,16 +129,45 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
         label.setFontScale(5f, 5f)
         label.setColor(0f, 0f, 0f, 1f)
         label.addAction(Actions.fadeIn(0.2f))
+
+        val bgtexture = Texture("background_white.jpg")
+        val bgTextureRegion = TextureRegion(bgtexture)
+        val bgTextureRegionDrawable = TextureRegionDrawable(bgTextureRegion)
+        val background = Image(bgTextureRegionDrawable).apply {
+            setPosition(0f,0f)
+            setSize(1920f, 200f)
+        }
+
+        val bordertexture = Texture("background_black.jpg")
+        val borderTextureRegion = TextureRegion(bordertexture)
+        val borderTextureRegionDrawable = TextureRegionDrawable(borderTextureRegion)
+        val border = Image(borderTextureRegionDrawable).apply {
+            setPosition(0f,200f)
+            setSize(1920f, 8f)
+        }
+
+        libgdxStage.addActor(background)
         libgdxStage.addActor(label)
+        libgdxStage.addActor(border)
+
         Timer.schedule(object : Timer.Task() {
             override fun run() {
                 label.addAction(Actions.fadeOut(0.2f))
+                background.addAction(Actions.fadeOut(0.2f))
+                border.addAction(Actions.fadeOut(0.2f))
             }
         }, 2f)
+
         Timer.schedule(object : Timer.Task() {
             override fun run() {
                 libgdxStage.actors.removeValue(label, false)
+                libgdxStage.actors.removeValue(background, false)
+                libgdxStage.actors.removeValue(border, false)
                 label.clear()
+                background.clear()
+                border.clear()
+                bgtexture.dispose()
+                bordertexture.dispose()
             }
         }, 2.3f)
     }

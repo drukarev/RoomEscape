@@ -49,7 +49,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
     }
 
     private fun setCurrentScreen(arrowDirection: ArrowDirection) {
-        stageUiHandler.playSound(Sound("ui_button_click.wav"))
+        stageUiHandler.playSound(Sound("ui_button_click.mp3"))
         currentScreen = when (arrowDirection) {
             ArrowDirection.LEFT -> currentScreen.leftScreen ?: currentScreen
             ArrowDirection.RIGHT -> currentScreen.rightScreen ?: currentScreen
@@ -86,7 +86,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
 
             Event.START_GAME -> {
                 currentScreen = screens.first()
-                stageUiHandler.playSound(Sound("ui_button_click.wav"))
+                stageUiHandler.playSound(Sound("ui_button_click.mp3"))
             }
 
             // Locker screen
@@ -99,7 +99,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
 
             Event.TABLET_CLICKED -> {
                 currentScreen = tabletScreen
-                stageUiHandler.playSound(Sound("ui_button_click.wav"))
+                stageUiHandler.playSound(Sound("ui_button_click.mp3"))
             }
 
             Event.LOCKER_DOOR_CLICKED -> {
@@ -149,10 +149,10 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
                     currentScreen = lockerScreen
                     lockerScreen.screenObjects.remove(LockerScreen.LockerDoorClosed)
                     lockerScreen.screenObjects.remove(LockerScreen.TabletItem)
-                    stageUiHandler.playSound(Sound("correct_password.wav"))
+                    stageUiHandler.playSound(Sound("correct_password.mp3"))
                     stageUiHandler.playSound(Sound("locker_opened.wav"))
                 } else {
-                    stageUiHandler.playSound(Sound("wrong_password.wav"))
+                    stageUiHandler.playSound(Sound("wrong_password.mp3"))
                 }
             }
 
@@ -167,7 +167,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
                     stageUiHandler.playSound(Sound("desk_drawer_open.wav"))
                 } else {
                     showTemporaryText("This locker is closed")
-                    stageUiHandler.playSound(Sound("desk_drawer_locked.wav"))
+                    stageUiHandler.playSound(Sound("desk_drawer_locked.mp3"))
                 }
             }
 
@@ -220,7 +220,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
 
             Event.DEPLOY_BUTTON_CLICKED -> {
                 if (workplaceScreen.screenObjects.find { it == WorkplaceScreen.NotebookWithBugFixedItem } != null) {
-                    stageUiHandler.playSound(Sound("deploy_button_hit.wav"))
+                    stageUiHandler.playSound(Sound("deploy_button_hit.mp3"))
                     currentScreen = endScreen
                 } else {
                     showTemporaryText("That's a deploy button. It's tempting")
@@ -232,7 +232,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
             Event.KEY_FROM_SNOWMAN_CLICKED -> {
                 snowmanScreen.screenObjects.remove(SnowmanScreen.KeyItem)
                 inventory.add(InventoryItem.Key)
-                stageUiHandler.playSound(Sound("key_taken.wav"))
+                stageUiHandler.playSound(Sound("key_taken.mp3"))
             }
 
             Event.BLOHAJ_CLICKED -> {
@@ -254,7 +254,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
 
             Event.LEFT_SCREW_CLICKED -> {
                 if (inventory.selectedItem == InventoryItem.Screwdriver) {
-                    stageUiHandler.playSound(Sound("turn_screw.wav")) //TODO: replace sound
+                    stageUiHandler.playSound(Sound("turn_screw.mp3")) //TODO: replace sound
                     whiteBoardScreen.screenObjects.remove(WhiteBoardScreen.LeftScrewItem)
                     if (whiteBoardScreen.screenObjects.find { it == WhiteBoardScreen.RightScrewItem } == null) {
                         whiteBoardScreen.screenObjects.remove(WhiteBoardScreen.TvLeftScrewItem)
@@ -269,7 +269,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
             }
             Event.RIGHT_SCREW_CLICKED -> {
                 if (inventory.selectedItem == InventoryItem.Screwdriver) {
-                    stageUiHandler.playSound(Sound("turn_screw.wav"))
+                    stageUiHandler.playSound(Sound("turn_screw.mp3"))
                     whiteBoardScreen.screenObjects.remove(WhiteBoardScreen.RightScrewItem)
                     if (whiteBoardScreen.screenObjects.find { it == WhiteBoardScreen.LeftScrewItem } == null) {
                         whiteBoardScreen.screenObjects.remove(WhiteBoardScreen.TvRightScrewItem)
@@ -297,7 +297,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
 
             Event.WHITEBOARD_NOTE_CLICKED -> {
                 showTemporaryText("""It says "One bug remaining till new release". I doubt it""")
-                stageUiHandler.playSound(Sound("paper_click.wav"))
+                stageUiHandler.playSound(Sound("paper_click.mp3"))
             }
 
             Event.BROKEN_TV_CLICKED -> {
