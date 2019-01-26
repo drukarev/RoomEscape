@@ -37,14 +37,6 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
 
     private lateinit var eventHandler: EventHandler
 
-    private lateinit var clickAnimationTexture1: Texture
-    private lateinit var clickAnimationTexture2: Texture
-    private lateinit var clickAnimationTexture3: Texture
-
-    private lateinit var clickAnimation: Animation<TextureRegion>
-    private var clickAnimationStateTime = 100f
-    private var clickAnimationCoordinates: Vector3 = Vector3()
-
     override fun create() {
         batch = SpriteBatch()
         camera = OrthographicCamera()
@@ -56,29 +48,9 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
         currentStage = Stage1(this)
         eventHandler = EventHandler(listOf(currentStage as EventHandler.Listener))
 
-        val inputMultiplexer = InputMultiplexer()
-        inputMultiplexer.addProcessor(GestureDetector(GestureListener()))
-        inputMultiplexer.addProcessor(libgdxStage)
-        Gdx.input.inputProcessor = inputMultiplexer
-
-        setupClickAnimation()
+        Gdx.input.inputProcessor = libgdxStage
 
         setMusic()
-    }
-
-    private fun setupClickAnimation() {
-        clickAnimationTexture1 = Texture("arrow_down.png")
-        clickAnimationTexture2 = Texture("arrow_left.png")
-        clickAnimationTexture3 = Texture("arrow_right.png")
-        val frames = Array(4) {
-            TextureRegion(when (it) {
-                0 -> clickAnimationTexture1
-                1 -> clickAnimationTexture2
-                2 -> clickAnimationTexture3
-                else -> clickAnimationTexture1
-            })
-        }
-        clickAnimation = Animation(0.1f, *frames)
     }
 
     private fun setMusic() {
@@ -94,21 +66,8 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
     }
 
     override fun render() {
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1f) //TODO: change to white
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT or GL20.GL_DEPTH_BUFFER_BIT)
-
-        if (clickAnimationStateTime < 0.5f) {
-            clickAnimationStateTime += Gdx.graphics.deltaTime
-        }
-
-        batch.apply {
-            begin()
-            if (clickAnimationStateTime < 0.4f) {
-                val currentFrame = clickAnimation.getKeyFrame(clickAnimationStateTime, false)
-                draw(currentFrame, clickAnimationCoordinates.x, clickAnimationCoordinates.y, 40f, 40f)
-            }
-            end()
-        }
 
         libgdxStage.act()
         libgdxStage.draw()
@@ -126,9 +85,6 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
         removeAllScreenElements()
         font.dispose()
         music.dispose()
-        clickAnimationTexture1.dispose()
-        clickAnimationTexture2.dispose()
-        clickAnimationTexture3.dispose()
         assetManager.dispose()
     }
 
@@ -276,32 +232,6 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
                     get<Music>(musicName).dispose()
                 }
             }, 7f)
-        }
-    }
-
-    private inner class GestureListener : GestureDetector.GestureListener {
-        override fun fling(velocityX: Float, velocityY: Float, button: Int) = false
-
-        override fun zoom(initialDistance: Float, distance: Float) = false
-
-        override fun pan(x: Float, y: Float, deltaX: Float, deltaY: Float) = false
-
-        override fun pinchStop() {}
-
-        override fun tap(x: Float, y: Float, count: Int, button: Int) = false
-
-        override fun panStop(x: Float, y: Float, pointer: Int, button: Int) = false
-
-        override fun longPress(x: Float, y: Float) = false
-
-        override fun pinch(initialPointer1: Vector2?, initialPointer2: Vector2?, pointer1: Vector2?, pointer2: Vector2?) = false
-
-        override fun touchDown(x: Float, y: Float, pointer: Int, button: Int): Boolean {
-            clickAnimationStateTime = 0f
-            val coordinates = Vector3(x, y, 0f)
-            camera.unproject(coordinates)
-            clickAnimationCoordinates = coordinates
-            return false
         }
     }
 }
