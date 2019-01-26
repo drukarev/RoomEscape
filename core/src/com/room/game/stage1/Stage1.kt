@@ -33,8 +33,12 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
     override var musicOn = true
         set(value) {
             if (value) {
+                stageUiHandler.removeScreenItem(SoundOffItem)
+                stageUiHandler.addScreenItem(SoundOnItem)
                 stageUiHandler.startMusic()
             } else {
+                stageUiHandler.removeScreenItem(SoundOnItem)
+                stageUiHandler.addScreenItem(SoundOffItem)
                 stageUiHandler.stopMusic()
             }
             field = value
@@ -69,7 +73,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
         currentScreen.rightScreen?.also {
             stageUiHandler.addScreenItem(RightArrowItem)
         }
-        stageUiHandler.addScreenItem(MusicItem)
+        stageUiHandler.addScreenItem(if (musicOn) SoundOnItem else SoundOffItem)
 
         inventory.redraw()
         stageUiHandler.fadeOut()
@@ -309,7 +313,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
             Event.LEFT_ARROW_CLICKED -> setCurrentScreen(ArrowDirection.LEFT)
             Event.RIGHT_ARROW_CLICKED -> setCurrentScreen(ArrowDirection.RIGHT)
             Event.DOWN_ARROW_CLICKED -> setCurrentScreen(ArrowDirection.DOWN)
-            Event.ICON_MUSIC_CLICKED -> { musicOn = !musicOn }
+            Event.ICON_SOUND_CLICKED -> { musicOn = !musicOn }
 
             // Inventory items
 
@@ -370,13 +374,22 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
             event = Event.DOWN_ARROW_CLICKED
     )
 
-    object MusicItem : ScreenItem(
-            drawable = Drawable("title_screen_sound.jpg"),
+    object SoundOnItem : ScreenItem(
+            drawable = Drawable("sound_on.jpg"),
             x = 50f,
             y = 930f,
             width = 100f,
             height = 100f,
-            event = Event.ICON_MUSIC_CLICKED
+            event = Event.ICON_SOUND_CLICKED
+    )
+
+    object SoundOffItem : ScreenItem(
+            drawable = Drawable("sound_off.jpg"),
+            x = 50f,
+            y = 930f,
+            width = 100f,
+            height = 100f,
+            event = Event.ICON_SOUND_CLICKED
     )
 }
 

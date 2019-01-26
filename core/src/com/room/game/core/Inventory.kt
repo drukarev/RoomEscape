@@ -17,7 +17,6 @@ class Inventory(private val uiHandler: StageUiHandler) {
                 uiHandler.playSound(Sound("ui_button_click.wav"))
                 val selectedScreenItem = SelectedScreenItem(it.second.x, it.second.y)
                 uiHandler.addScreenItem(selectedScreenItem)
-                uiHandler.moveScreenItemToBottom(selectedScreenItem)
                 this.selectedScreenItem = selectedScreenItem
             }
         }
@@ -58,9 +57,9 @@ class Inventory(private val uiHandler: StageUiHandler) {
     }
 
     data class SelectedScreenItem(val itemX: Float, val itemY: Float) : ScreenItem(
-            drawable = Drawable("locker_screen_phone.png"), //TODO: change
-            x = itemX,
-            y = itemY,
+            drawable = Drawable("item_selected.png"),
+            x = itemX - 20,
+            y = itemY - 20,
             width = 200f,
             height = 200f,
             event = null

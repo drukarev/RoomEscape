@@ -5,7 +5,7 @@ enum class Event {
     // Title screen
 
     START_GAME,
-    ICON_MUSIC_CLICKED,
+    ICON_SOUND_CLICKED,
 
     // Tablet screen
 
