@@ -247,6 +247,24 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
         music.pause()
     }
 
+    override fun playSound(sound: Sound) {
+        if (!currentStage.musicOn) {
+            return
+        }
+
+        assetManager.apply {
+            val musicName = sound.resourceId
+            load(musicName, Music::class.java)
+            finishLoading()
+            get<Music>(musicName).play()
+            Timer.schedule(object : Timer.Task() {
+                override fun run() {
+                    get<Music>(musicName).dispose()
+                }
+            }, 7f)
+        }
+    }
+
     private inner class GestureListener : GestureDetector.GestureListener {
         override fun fling(velocityX: Float, velocityY: Float, button: Int) = false
 

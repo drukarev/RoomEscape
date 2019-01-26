@@ -14,4 +14,5 @@ interface StageUiHandler {
 
     fun startMusic()
     fun stopMusic()
+    fun playSound(sound: Sound)
 }
