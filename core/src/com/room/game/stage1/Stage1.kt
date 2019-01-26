@@ -72,6 +72,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
         stageUiHandler.addScreenItem(MusicItem)
 
         inventory.redraw()
+        stageUiHandler.fadeOut()
     }
 
     override fun onEvent(event: Event) {

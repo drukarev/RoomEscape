@@ -19,6 +19,7 @@ import com.room.game.stage1.Stage1
 import com.badlogic.gdx.scenes.scene2d.Stage as LibgdxStage
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
+import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.utils.Timer
 import com.room.game.core.*
@@ -190,7 +191,7 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
         }, 2f)
         Timer.schedule(object : Timer.Task() {
             override fun run() {
-                libgdxStage.actors.removeValue(label, true)
+                libgdxStage.actors.removeValue(label, false)
                 label.clear()
             }
         }, 2.3f)
@@ -237,6 +238,24 @@ class RoomEscape : ApplicationAdapter(), StageUiHandler {
         }
         screenItems.clear()
         screenTexts.clear()
+    }
+
+    override fun fadeOut() {
+        val texture = Texture("blackout.jpg")
+        val textureRegion = TextureRegion(texture)
+        val textureRegionDrawable = TextureRegionDrawable(textureRegion)
+        val image = Image(textureRegionDrawable)
+        image.addAction(Actions.sequence(Actions.fadeOut(0.4f)))
+        image.zIndex = 1000001
+        libgdxStage.addActor(image)
+
+        Timer.schedule(object : Timer.Task() {
+            override fun run() {
+                libgdxStage.actors.removeValue(image, false)
+                image.clear()
+                texture.dispose()
+            }
+        }, 0.41f)
     }
 
     override fun startMusic() {

@@ -11,6 +11,7 @@ interface StageUiHandler {
     fun removeScreenText(screenText: ScreenText)
 
     fun removeAllScreenElements()
+    fun fadeOut()
 
     fun startMusic()
     fun stopMusic()
