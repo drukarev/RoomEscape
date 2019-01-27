@@ -24,83 +24,83 @@ class WorkplaceScreen(
     )
 
     object PowerSocketItem : ScreenItem(
-            drawable = Drawable("workplace_screen_power_socket.png"),
-            x = 50f,
-            y = 550f,
-            width = 82f,
-            height = 92f,
+            drawable = Drawable("workplace_screen_power_socket.jpg"),
+            x = 90f,
+            y = 560f,
+            width = 69f,
+            height = 64f,
             event = Event.POWER_SOCKET_ITEM_CLICKED
     )
 
     object PhoneHolderItem : ScreenItem(
-            drawable = Drawable("workplace_screen_phone_holder.png"),
-            x = 1000f,
-            y = 400f,
-            width = 156f,
-            height = 183f,
+            drawable = Drawable("workplace_screen_phone_holder.jpg"),
+            x = 1044f,
+            y = 458f,
+            width = 134f,
+            height = 154f,
             event = Event.PHONE_HOLDER_CLICKED
     )
 
     object PhoneHolderWithMobileItem : ScreenItem(
             drawable = Drawable("workplace_screen_connected_phone.png"),
-            x = 820f,
-            y = 380f,
-            width = 313f,
-            height = 241f,
+            x = 873f,
+            y = 440f,
+            width = 290f,
+            height = 204f,
             event = Event.CONNECTED_PHONE_CLICKED
     )
 
     object NotebookItem : ScreenItem(
             drawable = Drawable("workplace_screen_notebook.png"),
-            x = 330f,
-            y = 370f,
-            width = 582f,
-            height = 459f,
+            x = 405f,
+            y = 380f,
+            width = 514f,
+            height = 430f,
             event = Event.NOTEBOOK_CLICKED
     )
 
     object NotebookOnItem : ScreenItem(
             drawable = Drawable("workplace_screen_notebook_on.png"),
-            x = 330f,
-            y = 450f,
-            width = 582f,
-            height = 459f,
+            x = 332f,
+            y = 542f,
+            width = 682f,
+            height = 278f,
             event = Event.NOTEBOOK_CLICKED
     )
 
     object NotebookWithBugFixedItem : ScreenItem(
-            drawable = Drawable("phone.png"), //TODO: replace
-            x = 330f,
-            y = 450f,
-            width = 582f,
-            height = 459f,
+            drawable = Drawable("workplace_screen_commit_made.png"),
+            x = 332f,
+            y = 542f,
+            width = 682f,
+            height = 278f,
             event = Event.NOTEBOOK_CLICKED
     )
 
     object ConnectedChargerItem : ScreenItem(
             drawable = Drawable("workplace_screen_connected_charger.png"),
-            x = 30f,
-            y = 450f,
-            width = 429f,
-            height = 230f,
+            x = 94f,
+            y = 474f,
+            width = 373f,
+            height = 172f,
             event = null
     )
 
     object DeskLockerItem : ScreenItem(
             drawable = Drawable("workplace_screen_locker.png"),
-            x = 1190f,
+            x = 1199f,
             y = 0f,
-            width = 549f,
-            height = 354f,
+            width = 537f,
+            height = 342f,
             event = Event.DESK_LOCKER_ITEM_CLICKED
     )
 
     object DeskLockerShelfItem : ScreenItem(
             drawable = Drawable("workplace_screen_locker_box.png"),
-            x = 1300f,
-            y = 0f,
-            width = 540f,
-            height = 312f,
+            x = 1310f,
+            y = 15f,
+            width = 494f,
+            height = 262f,
             event = null
     )
 
@@ -114,11 +114,11 @@ class WorkplaceScreen(
     )
 
     object DeployButtonItem : ScreenItem(
-            drawable = Drawable("phone.png"), //TODO: replace
-            x = 1400f,
-            y = 400f,
-            width = 156f,
-            height = 183f,
+            drawable = Drawable("workplace_screen_deploy_button.png"),
+            x = 1250f,
+            y = 436f,
+            width = 274f,
+            height = 250f,
             event = Event.DEPLOY_BUTTON_CLICKED
     )
 }

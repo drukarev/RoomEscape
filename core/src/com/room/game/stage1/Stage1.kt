@@ -22,6 +22,11 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
 
     override val inventory: Inventory = Inventory(stageUiHandler)
 
+    init {
+        inventory.add(InventoryItem.Key)
+        inventory.add(InventoryItem.Phone)
+    }
+
     override val screens = listOf(whiteBoardScreen, lockerScreen, snowmanScreen, workplaceScreen)
 
     override var currentScreen: Screen = titleScreen
