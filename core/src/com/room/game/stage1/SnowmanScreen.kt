@@ -10,7 +10,7 @@ class SnowmanScreen(
         rightScreen: Screen?,
         downScreen: Screen?,
         uiHandler: StageUiHandler,
-        screenObjects: MutableList<ScreenItem> = mutableListOf(Background, BlohajItem, SnowmanItem, KeyItem)
+        screenObjects: MutableList<ScreenItem> = mutableListOf(Background, BlohajItem, BalanceboardItem, SnowmanItem, KeyItem)
 ) : Screen(leftScreen, rightScreen, downScreen, screenObjects, uiHandler) {
 
     object Background : ScreenItem(
@@ -24,8 +24,8 @@ class SnowmanScreen(
 
     object KeyItem : ScreenItem(
             drawable = Drawable("snowman_screen_key.png"),
-            x = 800f,
-            y = 430f,
+            x = 792f,
+            y = 500f,
             width = 72f,
             height = 86f,
             event = Event.KEY_FROM_SNOWMAN_CLICKED
@@ -33,20 +33,29 @@ class SnowmanScreen(
 
     object BlohajItem : ScreenItem(
             drawable = Drawable("snowman_screen_blohaj.png"),
-            x = 110f,
-            y = 100f,
-            width = 612f,
-            height = 636f,
+            x = 175f,
+            y = 390f,
+            width = 594f,
+            height = 618f,
             event = Event.BLOHAJ_CLICKED
     )
 
     object SnowmanItem : ScreenItem(
             drawable = Drawable("snowman_screen_snowman.png"),
             x = 800f,
-            y = 40f,
-            width = 1050f,
-            height = 828f,
+            y = 100f,
+            width = 1003f,
+            height = 800f,
             event = Event.SNOWMAN_CLICKED
+    )
+
+    object BalanceboardItem : ScreenItem(
+            drawable = Drawable("snowman_screen_balanceboard.png"),
+            x = 180f,
+            y = 60f,
+            width = 719f,
+            height = 347f,
+            event = Event.BALANCEBOARD_CLICKED
     )
 
     companion object {

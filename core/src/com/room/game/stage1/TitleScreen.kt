@@ -23,11 +23,11 @@ class TitleScreen(
     )
 
     object StartGameItem : ScreenItem(
-            drawable = Drawable("title_screen_start.jpg"),
-            x = 1300f,
-            y = 50f,
-            width = 439f,
-            height = 148f,
+            drawable = Drawable("start.jpg"),
+            x = 1340f,
+            y = 70f,
+            width = 442f,
+            height = 111f,
             event = Event.START_GAME
     )
 }

@@ -250,6 +250,10 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
                 showTemporaryText("That is obviously a snowman")
             }
 
+            Event.BALANCEBOARD_CLICKED -> {
+                showTemporaryText("Stable as our builds")
+            }
+
             // WhiteBoardScreen
 
             Event.LEFT_SCREW_CLICKED -> {
@@ -350,16 +354,16 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
 
     object LeftArrowItem : ScreenItem(
             drawable = Drawable("arrow_left.png"),
-            x = 50f,
-            y = 230f,
+            x = 30f,
+            y = 120f,
             width = 80f,
             height = 80f,
             event = Event.LEFT_ARROW_CLICKED)
 
     object RightArrowItem : ScreenItem(
             drawable = Drawable("arrow_right.png"),
-            x = 1830f,
-            y = 230f,
+            x = 1810f,
+            y = 120f,
             width = 80f,
             height = 80f,
             event = Event.RIGHT_ARROW_CLICKED
@@ -368,7 +372,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
     object DownArrowItem : ScreenItem(
             drawable = Drawable("arrow_down.png"),
             x = 920f,
-            y = 30f,
+            y = 20f,
             width = 80f,
             height = 80f,
             event = Event.DOWN_ARROW_CLICKED

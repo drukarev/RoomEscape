@@ -36,6 +36,7 @@ enum class Event {
     BLOHAJ_CLICKED,
     KEY_FROM_SNOWMAN_CLICKED,
     SNOWMAN_CLICKED,
+    BALANCEBOARD_CLICKED,
 
     // Locker screen
 
