@@ -25,7 +25,7 @@ class LockerScreen(
     object PhoneItem : ScreenItem(
             drawable = Drawable("locker_screen_phone.png"),
             x = 1000f,
-            y = 200f,
+            y = 208f,
             width = 134f,
             height = 123f,
             event = Event.PHONE_IN_LOCKER_CLICKED
@@ -33,19 +33,19 @@ class LockerScreen(
 
     object TabletItem : ScreenItem(
             drawable = Drawable("locker_screen_lock.png"),
-            x = 835f,
-            y = 200f,
-            width = 202f,
-            height = 278f,
+            x = 760f,
+            y = 398f,
+            width = 309f,
+            height = 244f,
             event = Event.TABLET_CLICKED
     )
 
     object LockerDoorClosed : ScreenItem(
             drawable = Drawable("locker_screen_door.png"),
-            x = 360f,
+            x = 384f,
             y = 0f,
-            width = 1104f,
-            height = 960f,
+            width = 1058f,
+            height = 948f,
             event = Event.LOCKER_DOOR_CLICKED
     )
 }
