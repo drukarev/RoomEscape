@@ -14,7 +14,7 @@ class EndScreen(
 ) : Screen(leftScreen, rightScreen, downScreen, screenObjects, uiHandler) {
 
     object Background : ScreenItem(
-            drawable = Drawable("end_screen_background.png"), //TODO: replace
+            drawable = Drawable("end_screen_background.jpg"),
             x = 0f,
             y = 0f,
             width = 1920f,

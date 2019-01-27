@@ -114,7 +114,7 @@ class TabletScreen(
 
     object EnterButton : ScreenItem(
             drawable = Drawable("phone.png"), //TODO: replace
-            x = 1450f,
+            x = 1200f,
             y = 750f,
             width = 302f,
             height = 200f,

@@ -27,7 +27,7 @@ class WhiteBoardScreen(
 
     object LeftScrewItem : ScreenItem(
             drawable = Drawable("whiteboard_screen_screw_left.png"),
-            x = 1246f,
+            x = 1216f,
             y = 850f,
             width = 71f,
             height = 91f,
@@ -36,7 +36,7 @@ class WhiteBoardScreen(
 
     object RightScrewItem : ScreenItem(
             drawable = Drawable("whiteboard_screen_screw_right.png"),
-            x = 1697f,
+            x = 1667f,
             y = 850f,
             width = 68f,
             height = 81f,
@@ -45,7 +45,7 @@ class WhiteBoardScreen(
 
     object TvItem : ScreenItem(
             drawable = Drawable("whiteboard_screen_tv.jpg"),
-            x = 1157f,
+            x = 1127f,
             y = 519f,
             width = 649f,
             height = 345f,
@@ -54,7 +54,7 @@ class WhiteBoardScreen(
 
     object Message134Item : ScreenItem(
             drawable = Drawable("whiteboard_screen_134.jpg"),
-            x = 1267f,
+            x = 1237f,
             y = 626f,
             width = 498f,
             height = 243f,
@@ -81,7 +81,7 @@ class WhiteBoardScreen(
 
     object TvBrokenItem : ScreenItem(
             drawable = Drawable("whiteboard_screen_tv_broken.png"),
-            x = 1130f,
+            x = 1100f,
             y = 0f,
             width = 801f,
             height = 346f,
@@ -90,7 +90,7 @@ class WhiteBoardScreen(
 
     object TvLeftScrewItem : ScreenItem(
             drawable = Drawable("whiteboard_screen_tv_left_screw.jpg"),
-            x = 1100f,
+            x = 1070f,
             y = 560f,
             width = 801f,
             height = 346f,
@@ -99,7 +99,7 @@ class WhiteBoardScreen(
 
     object TvRightScrewItem : ScreenItem(
             drawable = Drawable("whiteboard_screen_tv_right_screw.jpg"),
-            x = 1176f,
+            x = 1146f,
             y = 400f,
             width = 705f,
             height = 441f,
