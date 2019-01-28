@@ -10,7 +10,8 @@ class LockerScreen(
         rightScreen: Screen?,
         downScreen: Screen?,
         uiHandler: StageUiHandler,
-        screenObjects: MutableList<ScreenItem> = mutableListOf(Background, PhoneItem, LockerDoorClosed, TabletItem)
+        screenObjects: MutableList<ScreenItem> = mutableListOf(
+                Background, PhoneItem, InnerTabletItem, LockerDoorClosed, TabletItem)
 ) : Screen(leftScreen, rightScreen, downScreen, screenObjects, uiHandler) {
 
     object Background : ScreenItem(
@@ -38,6 +39,15 @@ class LockerScreen(
             width = 309f,
             height = 244f,
             event = Event.TABLET_CLICKED
+    )
+
+    object InnerTabletItem : ScreenItem(
+            drawable = Drawable("locker_screen_lock.png"),
+            x = 760f,
+            y = 398f,
+            width = 309f,
+            height = 244f,
+            event = Event.INNER_TABLET_CLICKED
     )
 
     object LockerDoorClosed : ScreenItem(

@@ -43,6 +43,7 @@ enum class Event {
     PHONE_IN_LOCKER_CLICKED,
     LOCKER_DOOR_CLICKED,
     TABLET_CLICKED,
+    INNER_TABLET_CLICKED,
 
     // Workplace screen
 

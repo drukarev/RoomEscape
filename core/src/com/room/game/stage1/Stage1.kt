@@ -94,7 +94,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
             Event.PHONE_IN_LOCKER_CLICKED -> {
                 lockerScreen.screenObjects.remove(LockerScreen.PhoneItem)
                 inventory.add(InventoryItem.Phone)
-                stageUiHandler.playSound(Sound("item_picked.wav"))
+                stageUiHandler.playSound(Sound("item_picked.mp3"))
             }
 
             Event.TABLET_CLICKED -> {
@@ -106,6 +106,10 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
                 if (lockerScreen.screenObjects.find { it == LockerScreen.LockerDoorClosed } != null) {
                     showTemporaryText("That's a stand with mobile phones. It is locked")
                 }
+            }
+
+            Event.INNER_TABLET_CLICKED -> {
+                showTemporaryText("Looks like someone took all the staff")
             }
 
             // Tablet screen
@@ -150,7 +154,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
                     lockerScreen.screenObjects.remove(LockerScreen.LockerDoorClosed)
                     lockerScreen.screenObjects.remove(LockerScreen.TabletItem)
                     stageUiHandler.playSound(Sound("correct_password.mp3"))
-                    stageUiHandler.playSound(Sound("locker_opened.wav"))
+                    stageUiHandler.playSound(Sound("locker_opened.mp3"))
                 } else {
                     stageUiHandler.playSound(Sound("wrong_password.mp3"))
                 }
@@ -163,8 +167,8 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
                     inventory.remove(InventoryItem.Key)
                     workplaceScreen.screenObjects.add(WorkplaceScreen.DeskLockerShelfItem)
                     workplaceScreen.screenObjects.add(WorkplaceScreen.ChargerItem)
-                    stageUiHandler.playSound(Sound("lock_open.wav"))
-                    stageUiHandler.playSound(Sound("desk_drawer_open.wav"))
+                    stageUiHandler.playSound(Sound("lock_open.mp3"))
+                    stageUiHandler.playSound(Sound("desk_drawer_open.mp3"))
                 } else {
                     showTemporaryText("This locker is closed")
                     stageUiHandler.playSound(Sound("desk_drawer_locked.mp3"))
@@ -175,7 +179,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
                 if (inventory.selectedItem == InventoryItem.Phone) {
                     inventory.remove(InventoryItem.Phone)
                     workplaceScreen.screenObjects.add(WorkplaceScreen.PhoneHolderWithMobileItem)
-                    stageUiHandler.playSound(Sound("cable_connected.wav"))
+                    stageUiHandler.playSound(Sound("cable_connected.mp3"))
                 } else {
                     showTemporaryText("Looks like a phone holder")
                 }
@@ -186,8 +190,8 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
                     inventory.remove(InventoryItem.Charger)
                     workplaceScreen.screenObjects.add(WorkplaceScreen.ConnectedChargerItem)
                     workplaceScreen.screenObjects.add(WorkplaceScreen.NotebookOnItem)
-                    stageUiHandler.playSound(Sound("cable_connected.wav"))
-                    stageUiHandler.playSound(Sound("notebook_start_up.wav"))
+                    stageUiHandler.playSound(Sound("cable_connected.mp3"))
+                    stageUiHandler.playSound(Sound("notebook_start_up.mp3"))
                 }
             }
 
@@ -215,7 +219,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
             Event.CHARGER_CLICKED -> {
                 workplaceScreen.screenObjects.remove(WorkplaceScreen.ChargerItem)
                 inventory.add(InventoryItem.Charger)
-                stageUiHandler.playSound(Sound("item_picked.wav"))
+                stageUiHandler.playSound(Sound("item_picked.mp3"))
             }
 
             Event.DEPLOY_BUTTON_CLICKED -> {
@@ -237,11 +241,11 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
 
             Event.BLOHAJ_CLICKED -> {
                 if (SnowmanScreen.alreadyTookScrewdriver) {
-                    showTemporaryText("Still a very fluffy shark")
+                    showTemporaryText("Still a very fluffy shark. It had a screwdriver in its jaws")
                 } else {
                     showTemporaryText("A very fluffy shark. It has a screwdriver in its jaws")
                     inventory.add(InventoryItem.Screwdriver)
-                    stageUiHandler.playSound(Sound("item_picked.wav"))
+                    stageUiHandler.playSound(Sound("item_picked.mp3"))
                     SnowmanScreen.alreadyTookScrewdriver = true
                 }
             }
@@ -355,7 +359,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
     object LeftArrowItem : ScreenItem(
             drawable = Drawable("arrow_left.png"),
             x = 30f,
-            y = 120f,
+            y = 320f,
             width = 80f,
             height = 80f,
             event = Event.LEFT_ARROW_CLICKED)
@@ -363,7 +367,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
     object RightArrowItem : ScreenItem(
             drawable = Drawable("arrow_right.png"),
             x = 1810f,
-            y = 120f,
+            y = 320f,
             width = 80f,
             height = 80f,
             event = Event.RIGHT_ARROW_CLICKED
