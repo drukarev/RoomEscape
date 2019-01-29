@@ -22,10 +22,6 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
 
     override val inventory: Inventory = Inventory(stageUiHandler)
 
-    init {
-        inventory.add(InventoryItem.Screwdriver)
-    }
-
     override val screens = listOf(whiteBoardScreen, lockerScreen, snowmanScreen, workplaceScreen)
 
     override var currentScreen: Screen = titleScreen
@@ -108,12 +104,12 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
 
             Event.LOCKER_DOOR_CLICKED -> {
                 if (lockerScreen.screenObjects.find { it == LockerScreen.LockerDoorClosed } != null) {
-                    showTemporaryText("That's a stand with mobile phones. It is locked")
+                    showTemporaryText("That's a stand for mobile phones. It is locked")
                 }
             }
 
             Event.INNER_TABLET_CLICKED -> {
-                showTemporaryText("Looks like someone took all the staff")
+                showTemporaryText("Someone took all the phones")
             }
 
             // Tablet screen
@@ -174,7 +170,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
                     stageUiHandler.playSound(Sound("lock_open.mp3"))
                     stageUiHandler.playSound(Sound("desk_drawer_open.mp3"))
                 } else {
-                    showTemporaryText("This locker is closed")
+                    showTemporaryText("This drawer is closed")
                     stageUiHandler.playSound(Sound("desk_drawer_locked.mp3"))
                 }
             }
@@ -231,7 +227,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
                     stageUiHandler.playSound(Sound("deploy_button_hit.mp3"))
                     currentScreen = endScreen
                 } else {
-                    showTemporaryText("That's a deploy button. It's tempting")
+                    showTemporaryText("That's a deploy button. It is tempting")
                 }
             }
 
@@ -266,7 +262,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
 
             Event.LEFT_SCREW_CLICKED -> {
                 if (inventory.selectedItem == InventoryItem.Screwdriver) {
-                    stageUiHandler.playSound(Sound("turn_screw.mp3")) //TODO: replace sound
+                    stageUiHandler.playSound(Sound("turn_screw.mp3"))
                     whiteBoardScreen.screenObjects.remove(WhiteBoardScreen.LeftScrewItem)
                     if (whiteBoardScreen.screenObjects.find { it == WhiteBoardScreen.RightScrewItem } == null) {
                         whiteBoardScreen.screenObjects.remove(WhiteBoardScreen.TvLeftScrewItem)
@@ -296,7 +292,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
             }
 
             Event.TV_CLICKED -> {
-                showTemporaryText("Let's pretend I didn't see this")
+                showTemporaryText("Let's pretend I didn't see that")
             }
 
             Event.MESSAGE_134_CLICKED -> {
@@ -308,7 +304,7 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
             }
 
             Event.WHITEBOARD_NOTE_CLICKED -> {
-                showTemporaryText("""It says "One bug remaining till new release". I doubt it""")
+                showTemporaryText(""""One bug left before new release". I doubt it""")
                 stageUiHandler.playSound(Sound("paper_click.mp3"))
             }
 
