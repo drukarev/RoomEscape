@@ -34,90 +34,90 @@ class TabletScreen(
     object Number1Button : ScreenItem(
             drawable = Drawable("tablet_screen_button1.jpg"),
             x = 450f,
-            y = 550f,
+            y = 600f,
             width = 302f,
             height = 200f,
             event = Event.NUMBER_1_BUTTON_CLICKED
     )
 
     object Number2Button : ScreenItem(
-            drawable = Drawable("tablet_screen_button1.jpg"), //TODO: replace
-            x = 800f,
-            y = 550f,
+            drawable = Drawable("tablet_screen_button2.jpg"),
+            x = 796f,
+            y = 600f,
             width = 302f,
             height = 200f,
             event = Event.NUMBER_2_BUTTON_CLICKED
     )
 
     object Number3Button : ScreenItem(
-            drawable = Drawable("tablet_screen_button1.jpg"), //TODO: replace
-            x = 1150f,
-            y = 550f,
+            drawable = Drawable("tablet_screen_button3.jpg"),
+            x = 1140f,
+            y = 600f,
             width = 302f,
             height = 200f,
             event = Event.NUMBER_3_BUTTON_CLICKED
     )
 
     object Number4Button : ScreenItem(
-            drawable = Drawable("tablet_screen_button1.jpg"), //TODO: replace
+            drawable = Drawable("tablet_screen_button4.jpg"),
             x = 450f,
-            y = 300f,
+            y = 400f,
             width = 302f,
             height = 200f,
             event = Event.NUMBER_4_BUTTON_CLICKED
     )
 
     object Number5Button : ScreenItem(
-            drawable = Drawable("tablet_screen_button1.jpg"), //TODO: replace
-            x = 800f,
-            y = 300f,
+            drawable = Drawable("tablet_screen_button5.jpg"),
+            x = 796f,
+            y = 400f,
             width = 302f,
             height = 200f,
             event = Event.NUMBER_5_BUTTON_CLICKED
     )
 
     object Number6Button : ScreenItem(
-            drawable = Drawable("tablet_screen_button1.jpg"), //TODO: replace
-            x = 1150f,
-            y = 300f,
+            drawable = Drawable("tablet_screen_button6.jpg"),
+            x = 1140f,
+            y = 400f,
             width = 302f,
             height = 200f,
             event = Event.NUMBER_6_BUTTON_CLICKED
     )
 
     object Number7Button : ScreenItem(
-            drawable = Drawable("tablet_screen_button1.jpg"), //TODO: replace
+            drawable = Drawable("tablet_screen_button7.jpg"),
             x = 450f,
-            y = 50f,
+            y = 200f,
             width = 302f,
             height = 200f,
             event = Event.NUMBER_7_BUTTON_CLICKED
     )
 
     object Number8Button : ScreenItem(
-            drawable = Drawable("tablet_screen_button1.jpg"), //TODO: replace
-            x = 800f,
-            y = 50f,
+            drawable = Drawable("tablet_screen_button8.jpg"),
+            x = 796f,
+            y = 200f,
             width = 302f,
             height = 200f,
             event = Event.NUMBER_8_BUTTON_CLICKED
     )
 
     object Number9Button : ScreenItem(
-            drawable = Drawable("tablet_screen_button1.jpg"), //TODO: replace
-            x = 1150f,
-            y = 50f,
+            drawable = Drawable("tablet_screen_button9.jpg"),
+            x = 1140f,
+            y = 200f,
             width = 302f,
             height = 200f,
             event = Event.NUMBER_9_BUTTON_CLICKED
     )
 
     object EnterButton : ScreenItem(
-            drawable = Drawable("phone.png"), //TODO: replace
-            x = 1200f,
-            y = 750f,
-            width = 302f,
-            height = 200f,
+            drawable = Drawable("tablet_screen_ok_button.jpg"),
+            x = 1160f,
+            y = 822f,
+            width = 125f,
+            height = 124f,
             event = Event.ENTER_BUTTON_CLICKED
     )
 
@@ -127,11 +127,13 @@ class TabletScreen(
     fun addDigit(newChar: Char): AddDigitResponse {
         if (passCode.length < 6) {
             passCode += newChar
+            val newScreenText = ScreenText(passCode, 746f, 876f)
+            val response = AddDigitResponse(lastScreenText, newScreenText)
+            lastScreenText = newScreenText
+            return response
+        } else {
+            return AddDigitResponse(null, null)
         }
-        val newScreenText = ScreenText(passCode, 830f, 830f)
-        val response = AddDigitResponse(lastScreenText, newScreenText)
-        lastScreenText = newScreenText
-        return response
     }
 
     fun checkPasscode(): PasscodeCheckResponse {
@@ -150,8 +152,8 @@ class TabletScreen(
     )
 
     data class AddDigitResponse(
-            val lastScreenText: ScreenText,
-            val newScreenText: ScreenText
+            val lastScreenText: ScreenText?,
+            val newScreenText: ScreenText?
     )
 
     enum class PasscodeState {

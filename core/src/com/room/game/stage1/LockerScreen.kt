@@ -35,18 +35,18 @@ class LockerScreen(
     object TabletItem : ScreenItem(
             drawable = Drawable("locker_screen_lock.png"),
             x = 760f,
-            y = 398f,
+            y = 404f,
             width = 309f,
             height = 244f,
             event = Event.TABLET_CLICKED
     )
 
     object InnerTabletItem : ScreenItem(
-            drawable = Drawable("locker_screen_lock.png"),
-            x = 760f,
-            y = 398f,
-            width = 309f,
-            height = 244f,
+            drawable = Drawable("locker_screen_inner_tablet.png"),
+            x = 755f,
+            y = 393f,
+            width = 336f,
+            height = 234f,
             event = Event.INNER_TABLET_CLICKED
     )
 

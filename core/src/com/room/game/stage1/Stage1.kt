@@ -22,6 +22,10 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
 
     override val inventory: Inventory = Inventory(stageUiHandler)
 
+    init {
+        inventory.add(InventoryItem.Screwdriver)
+    }
+
     override val screens = listOf(whiteBoardScreen, lockerScreen, snowmanScreen, workplaceScreen)
 
     override var currentScreen: Screen = titleScreen
@@ -339,8 +343,12 @@ class Stage1(private val stageUiHandler: StageUiHandler) : Stage, EventHandler.L
     private fun onTabletButtonClicked(value: Char) {
         stageUiHandler.playSound(Sound("digital_button_pressed.mp3"))
         tabletScreen.addDigit(value).apply {
-            stageUiHandler.removeScreenText(lastScreenText)
-            stageUiHandler.addScreenText(newScreenText)
+            lastScreenText?.also {
+                stageUiHandler.removeScreenText(it)
+            }
+            newScreenText?.also {
+                stageUiHandler.addScreenText(it)
+            }
         }
     }
 
